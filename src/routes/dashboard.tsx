@@ -36,13 +36,13 @@ import { TrafficChart } from "@/components/traffic-chart";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Live Dashboard — Overrank" },
+      { title: "Live Dashboard — GeoRanked" },
       {
         name: "description",
         content:
           "Explore your autonomous SEO workspace. Traffic, AI citations, article generation, and CMS integrations in an interactive demo.",
       },
-      { property: "og:title", content: "Overrank Live Dashboard" },
+      { property: "og:title", content: "GeoRanked Live Dashboard" },
       {
         property: "og:description",
         content: "Explore your organic growth workspace and generate a demo article.",

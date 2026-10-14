@@ -4,12 +4,12 @@ import { HowItWorks, FAQ } from "@/components/marketing/sections";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
-      { title: "How Overrank works — Overrank" },
-      { name: "description", content: "Discover, create, publish and grow with autonomous SEO." },
-      { property: "og:title", content: "How Overrank works — Overrank" },
+      { title: "How GeoRanked works — GeoRanked" },
+      { name: "description", content: "Discover, create, publish and grow with autonomous SEO and GEO." },
+      { property: "og:title", content: "How GeoRanked works — GeoRanked" },
       {
         property: "og:description",
-        content: "Discover, create, publish and grow with autonomous SEO.",
+        content: "Discover, create, publish and grow with autonomous SEO and GEO.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

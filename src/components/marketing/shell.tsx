@@ -59,17 +59,30 @@ export function MarketingShell({ children }: { children: ReactNode }) {
         )}
       </header>
       <main>{children}</main>
-      <footer className="border-t border-border px-6 py-10">
+      <footer className="border-t border-border bg-background px-6 py-12">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6">
-          <Brand />
-          <p className="text-xs text-muted-foreground">
-            © 2026 Overrank. Built for your next chapter.
-          </p>
-          <div className="flex gap-6 text-xs text-muted-foreground">
-            <Link to="/pricing">Pricing</Link>
-            <Link to="/dashboard">
-              Live demo <span className="text-primary">↗</span>
+          <div className="flex flex-col gap-1">
+            <Brand />
+            <p className="mt-1 text-xs text-muted-foreground">
+              Autonomous SEO & Generative Engine Optimization for modern brands.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-7 text-xs font-medium text-muted-foreground">
+            <Link to="/how-it-works" className="hover:text-primary transition-colors">How it works</Link>
+            <Link to="/ai-search" className="hover:text-primary transition-colors">AI Search</Link>
+            <Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link>
+            <Link to="/results" className="hover:text-primary transition-colors">Results</Link>
+            <Link to="/dashboard" className="text-primary hover:underline">
+              Live demo ↗
             </Link>
+          </div>
+        </div>
+        <div className="mx-auto mt-8 flex max-w-6xl flex-wrap items-center justify-between border-t border-border pt-6 text-[11px] text-muted-foreground">
+          <p>© 2026 GeoRanked. All rights reserved.</p>
+          <div className="flex gap-5">
+            <span className="hover:text-foreground cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-foreground cursor-pointer">Terms of Service</span>
+            <span className="hover:text-foreground cursor-pointer">Security</span>
           </div>
         </div>
       </footer>

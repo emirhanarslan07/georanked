@@ -78,12 +78,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Overrank — Autonomous SEO & AI Search" },
+      { title: "GeoRanked — Autonomous SEO & AI Search" },
       {
         name: "description",
         content: "Grow your visibility in Google and AI search with autonomous content.",
       },
-      { property: "og:title", content: "Overrank — Autonomous SEO & AI Search" },
+      { property: "og:title", content: "GeoRanked — Autonomous SEO & AI Search" },
       {
         property: "og:description",
         content: "Grow your visibility in Google and AI search with autonomous content.",

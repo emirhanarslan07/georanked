@@ -1,52 +1,112 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import wordpress from "@/assets/logos/wordpress.svg.asset.json";
-import shopify from "@/assets/logos/shopify.svg.asset.json";
-import webflow from "@/assets/logos/webflow.svg.asset.json";
-import openai from "@/assets/logos/openai.svg.asset.json";
-import perplexity from "@/assets/logos/perplexity.svg.asset.json";
-import gemini from "@/assets/logos/googlegemini.svg.asset.json";
-import google from "@/assets/logos/google.svg.asset.json";
-const logos: Record<string, { url: string }> = {
-  WordPress: wordpress,
-  Shopify: shopify,
-  Webflow: webflow,
-  ChatGPT: openai,
-  Perplexity: perplexity,
-  Gemini: gemini,
-  Google: google,
-};
+import React from "react";
+
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       to="/"
-      aria-label="Overrank home"
+      aria-label="GeoRanked home"
       className="inline-flex shrink-0 items-center gap-2.5 text-[21px] font-extrabold text-foreground sm:text-[24px]"
     >
-      <span className="brand-symbol flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <ArrowUpRight className="size-6" strokeWidth={3} />
+      <span className="brand-symbol flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#7c5cfc] to-[#3b82f6] text-white shadow-md">
+        <ArrowUpRight className="size-5" strokeWidth={2.5} />
       </span>
       {!compact && (
-        <span>
-          overrank<span className="text-primary">.</span>
+        <span className="tracking-tight">
+          <span className="text-[#7c5cfc] font-black">geo</span>
+          <span className="text-foreground">ranked</span>
+          <span className="text-primary font-black">.</span>
         </span>
       )}
     </Link>
   );
 }
+
+/* SVG Vector Icons - Independent of Lovable CDN */
 export function PlatformLogo({ name, iconOnly = false }: { name: string; iconOnly?: boolean }) {
-  const asset = logos[name];
+  const getIcon = () => {
+    switch (name.toLowerCase()) {
+      case "google":
+        return (
+          <svg className="size-5 shrink-0" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+          </svg>
+        );
+      case "chatgpt":
+      case "openai":
+        return (
+          <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22.28 10.57a5.53 5.53 0 0 0-.46-4.39 5.6 5.6 0 0 0-4.66-2.77 5.63 5.63 0 0 0-4.06 1.7A5.54 5.54 0 0 0 8.84 3.5a5.6 5.6 0 0 0-5.07 3.3 5.56 5.56 0 0 0-2.3 3.86 5.63 5.63 0 0 0 .8 4.88 5.53 5.53 0 0 0 .46 4.39 5.6 5.6 0 0 0 4.66 2.77 5.62 5.62 0 0 0 4.06-1.7 5.54 5.54 0 0 0 4.26 1.61 5.6 5.6 0 0 0 5.07-3.3 5.56 5.56 0 0 0 2.3-3.86 5.63 5.63 0 0 0-.8-4.88zm-8.8 10.74a4.1 4.1 0 0 1-2.65-.96l.14-.08 4.4-2.54a.78.78 0 0 0 .39-.68v-6.22l1.86 1.08a.07.07 0 0 1 .04.06v5.18a4.13 4.13 0 0 1-4.18 4.16zm-7.7-3.3a4.08 4.08 0 0 1-.5-2.77l.14.09 4.4 2.54a.77.77 0 0 0 .78 0l5.38-3.11v2.15a.07.07 0 0 1-.03.06l-4.48 2.59a4.13 4.13 0 0 1-5.69-1.55zm-1.42-7.8a4.1 4.1 0 0 1 2.14-1.81v5.25a.78.78 0 0 0 .39.68l5.38 3.1-1.86 1.08a.07.07 0 0 1-.07 0l-4.48-2.59a4.13 4.13 0 0 1-1.5-5.71zm13.12 1.57l-5.38-3.11 1.86-1.07a.07.07 0 0 1 .07 0l4.48 2.58a4.13 4.13 0 0 1 1.5 5.71 4.1 4.1 0 0 1-2.14 1.82v-5.25a.78.78 0 0 0-.39-.68zm2.4 4.54a4.1 4.1 0 0 1 .5 2.77l-.14-.09-4.4-2.54a.77.77 0 0 0-.78 0l-5.38 3.11v-2.15a.07.07 0 0 1 .03-.06l4.48-2.59a4.13 4.13 0 0 1 5.69 1.55zM12 13.58l-2.4-1.39 2.4-1.38 2.4 1.38-2.4 1.39zm-3.7-4.43l1.86-1.08a.07.07 0 0 1 .07 0l4.48 2.59a4.13 4.13 0 0 1-1.5 5.71 4.1 4.1 0 0 1-2.14-1.82v-5.25a.78.78 0 0 0-.39-.68z" />
+          </svg>
+        );
+      case "perplexity":
+        return (
+          <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="#1fb8cd">
+            <path d="M12 2a1 1 0 0 0-1 1v4.062L5.422 3.484a1 1 0 0 0-1.37.348l-2 3.464a1 1 0 0 0 .366 1.366L7 11.234V13H3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4v1.766l-4.582 2.572a1 1 0 0 0-.366 1.366l2 3.464a1 1 0 0 0 1.37.348L11 24.938V29a1 1 0 0 0 2 0v-4.062l5.578 3.578a1 1 0 0 0 1.37-.348l2-3.464a1 1 0 0 0-.366-1.366L17 20.766V19h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-4v-1.766l4.582-2.572a1 1 0 0 0 .366-1.366l-2-3.464a1 1 0 0 0-1.37-.348L13 7.062V3a1 1 0 0 0-1-1zm0 7.828l4 2.25V18.17l-4 2.25-4-2.25V12.078l4-2.25z" transform="scale(0.7) translate(5,5)" />
+          </svg>
+        );
+      case "gemini":
+        return (
+          <svg className="size-5 shrink-0" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gemini-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#4796E3" />
+                <stop offset="50%" stopColor="#9177C7" />
+                <stop offset="100%" stopColor="#D56F82" />
+              </linearGradient>
+            </defs>
+            <path d="M12 24A14.304 14.304 0 0 0 0 12 14.304 14.304 0 0 0 12 0a14.305 14.305 0 0 0 12 12 14.305 14.305 0 0 0-12 12" fill="url(#gemini-grad)" />
+          </svg>
+        );
+      case "wordpress":
+        return (
+          <svg className="size-5 shrink-0 text-[#21759B]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312L5.05 12.012c0-.012 0-.024.004-.036a7.994 7.994 0 0 1 2.298-5.32c1.23-1.157 2.766-1.745 4.608-1.745 1.488 0 2.808.384 3.96 1.152l-9.564 15.25A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-1.09 17.587l-3.324-9.336c.648-.036 1.344-.096 1.344-.096.516-.06.456-.816-.06-.792 0 0-1.572.12-2.592.12-.132 0-.3 0-.48-.012A8.026 8.026 0 0 1 12 4.02c1.788 0 3.396.588 4.692 1.584-.504.024-1.02.048-1.02.048-.516.036-.456.816.06.792 0 0 1.548-.12 2.532-.12.984 0 2.532.12 2.532.12.516.024.576-.756.06-.792 0 0-.552-.024-1.092-.048A7.95 7.95 0 0 1 19.98 12c0 2.604-1.248 4.92-3.18 6.408l-3.324-9.876c.48-.036 1.02-.096 1.02-.096.516-.06.456-.816-.06-.792 0 0-1.548.12-2.568.12-.996 0-2.544-.12-2.544-.12-.516.024-.456.804.06.792 0 0 .588.06 1.092.096l1.428 3.948-2.004 6.107z" />
+          </svg>
+        );
+      case "shopify":
+        return (
+          <svg className="size-5 shrink-0 text-[#96BF48]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.337 3.018a.586.586 0 0 0-.48-.135c-.21.033-.42.083-.62.15l-1.34-4.103a.586.586 0 0 0-.74-.368L9.932-.693a.586.586 0 0 0-.37.74l1.378 4.223-3.69 1.13a.586.586 0 0 0-.395.727l5.228 17.06a.586.586 0 0 0 .727.395l11.085-3.396a.586.586 0 0 0 .395-.727L19.06 2.39a.586.586 0 0 0-.728-.395l-2.995.918zm-2.042.625l1.042 3.193-2.61.8-1.042-3.193 2.61-.8z" transform="scale(0.85) translate(2,2)" />
+          </svg>
+        );
+      case "webflow":
+        return (
+          <svg className="size-5 shrink-0 text-[#146EF5]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.89 7.37L15.35 17H11.5l2.42-6.52c-.67-.7-1.57-1.1-2.54-1.12-1.37 0-2.5.82-3.05 2.05L6.1 17H2.26l3.88-8.68A6.33 6.33 0 0 1 11.75 4c2.06 0 3.87.97 5.04 2.5l.06-.02 2.04-.98v1.87zm-7.61 7.47c.28-.5.79-.82 1.37-.84.97 0 1.63.7 1.63 1.67 0 .96-.66 1.66-1.63 1.66-.58 0-1.09-.32-1.37-.82v-1.67z" />
+          </svg>
+        );
+      case "ghost":
+        return (
+          <svg className="size-5 shrink-0 text-[#15171A]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 3.82 2.14 7.14 5.27 8.84-.04-.54-.07-1.11-.07-1.69 0-2.82.91-5.42 2.45-7.53C9.35 11.14 9.17 10.6 9.17 10c0-1.66 1.34-3 3-3s3 1.34 3 3c0 .6-.18 1.14-.48 1.62 1.54 2.11 2.45 4.71 2.45 7.53 0 .58-.03 1.15-.07 1.69C20.2 18.82 22 15.62 22 12c0-5.52-4.48-10-10-10z" />
+          </svg>
+        );
+      case "wix":
+        return (
+          <svg className="size-5 shrink-0 text-[#0C0C0D]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16.92 7.64l-2.09 7.02-2.13-7.02H10.5l-2.12 7.02L6.3 7.64H3.88l3.6 10.72h2.52l2.09-6.72 2.09 6.72h2.52l3.6-10.72h-3.38z" />
+          </svg>
+        );
+      case "squarespace":
+        return (
+          <svg className="size-5 shrink-0 text-[#121212]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.88 7.37a7.28 7.28 0 0 0-4.73-3.12 7.37 7.37 0 0 0-5.83 1.32l1.64 1.64a5.06 5.06 0 0 1 4-.9 5.06 5.06 0 0 1 3.28 2.16l-1.95 1.95a2.76 2.76 0 0 0-1.78-1.18 2.75 2.75 0 0 0-2.18.5l1.65 1.64 1.25-1.25.75.75-2.01 2.01-1.65-1.64a2.77 2.77 0 0 0-.5 2.18 2.77 2.77 0 0 0 1.18 1.78l1.95-1.95a5.05 5.05 0 0 1-2.16-3.28 5.05 5.05 0 0 1 .9-4L9.04 6.85a7.37 7.37 0 0 0-1.32 5.83 7.28 7.28 0 0 0 3.12 4.73l1.64-1.64a5.05 5.05 0 0 1-2.16-3.28 5.05 5.05 0 0 1 .9-4l1.95 1.95a2.76 2.76 0 0 0-.5 2.18 2.76 2.76 0 0 0 1.18 1.78l-1.64 1.64-1.26-1.25-.75.75 2.01 2.01 1.64-1.64a2.77 2.77 0 0 0 2.18-.5 2.77 2.77 0 0 0 1.78-1.18l-1.95-1.95a5.06 5.06 0 0 1 3.28 2.16 5.06 5.06 0 0 1 4-.9l1.64-1.64a7.37 7.37 0 0 0 1.32-5.83 7.28 7.28 0 0 0-3.12-4.73l-1.64 1.64z" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <span className="inline-flex shrink-0 items-center gap-2.5 font-semibold">
-      {asset && (
-        <span
-          role="img"
-          aria-label={`${name} logo`}
-          className={`platform-logo size-5 shrink-0 ${iconOnly ? "" : "sm:size-6"}`}
-          style={{ maskImage: `url("${asset.url}")`, WebkitMaskImage: `url("${asset.url}")` }}
-        />
-      )}
-      {!iconOnly && name}
+    <span className="inline-flex shrink-0 items-center gap-2 font-semibold">
+      {getIcon()}
+      {!iconOnly && <span>{name}</span>}
     </span>
   );
 }

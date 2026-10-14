@@ -4,10 +4,10 @@ import { Pricing, FAQ } from "@/components/marketing/sections";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Overrank Pricing — Overrank" },
-      { name: "description", content: "Autonomous SEO plans from $39 per month." },
-      { property: "og:title", content: "Overrank Pricing — Overrank" },
-      { property: "og:description", content: "Autonomous SEO plans from $39 per month." },
+      { title: "GeoRanked Pricing — GeoRanked" },
+      { name: "description", content: "Autonomous SEO and GEO plans from $39 per month." },
+      { property: "og:title", content: "GeoRanked Pricing — GeoRanked" },
+      { property: "og:description", content: "Autonomous SEO and GEO plans from $39 per month." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

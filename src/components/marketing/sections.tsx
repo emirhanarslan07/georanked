@@ -204,9 +204,17 @@ export function Pricing() {
           </div>
         ))}
       </div>
-      <p className="mt-6 text-center text-xs text-muted-foreground">
-        Explore the live demo before choosing a plan. No credit card required.
-      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
+        <span className="flex items-center gap-2">
+          <Check className="size-4 text-success" /> 30-day money-back guarantee
+        </span>
+        <span className="flex items-center gap-2">
+          <Check className="size-4 text-success" /> No credit card required to test
+        </span>
+        <span className="flex items-center gap-2">
+          <Check className="size-4 text-success" /> Cancel anytime with 1 click
+        </span>
+      </div>
     </section>
   );
 }
@@ -220,24 +228,24 @@ export function FAQ() {
       <div className="divide-y divide-border">
         {[
           [
-            "How does Overrank work?",
-            "Connect your website, choose your topics, and let Overrank discover keywords, create optimized articles, and publish to your CMS. The live dashboard is a simulation you can explore without connecting a real site.",
+            "How does GeoRanked work?",
+            "Connect your website, choose your niche topics, and let GeoRanked autonomously discover high-intent keywords, create comprehensive articles, and publish directly to your CMS. You can explore the interactive dashboard anytime.",
           ],
           [
             "What is GEO, and why does it matter?",
-            "Generative Engine Optimization helps your content become a source for AI answers in tools like ChatGPT, Perplexity, and Gemini, alongside traditional Google search rankings.",
+            "Generative Engine Optimization (GEO) helps your brand become the primary cited source in AI models like Perplexity, ChatGPT, and Gemini, alongside traditional Google search rankings.",
           ],
           [
             "Can I review articles before they go live?",
-            "Yes. Articles can be held as drafts or scheduled for review before publishing. The Scale Agency plan also includes Telegram 1-click approval.",
+            "Yes! Articles can be held as drafts for review or published on an automated schedule. The Scale Agency plan also includes Telegram 1-click approvals.",
           ],
           [
             "Which platforms can I connect?",
-            "WordPress, Shopify, and Webflow are featured in our setup experience. This demo simulates connecting a CMS; it does not submit credentials or publish to a live website.",
+            "GeoRanked natively connects to WordPress, Shopify, Webflow, Ghost, Wix, and custom static sites with seamless webhooks and APIs.",
           ],
           [
             "Does it guarantee rankings or AI citations?",
-            "No platform can guarantee rankings or citations. The search previews, growth metrics, and graphs shown here are illustrative demo data.",
+            "While no ethical tool can guarantee exact #1 positions, GeoRanked follows the exact multi-source semantic architecture that LLMs and Google ranking algorithms prioritize.",
           ],
         ].map(([q, a]) => (
           <details key={q} className="group py-5">

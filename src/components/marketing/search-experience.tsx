@@ -67,11 +67,11 @@ function useRanking() {
 function ComparisonControls({ sim }: { sim: ReturnType<typeof useRanking> }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <div className="flex rounded-full border border-border bg-muted p-1">
+      <div className="flex rounded-full border border-border bg-muted/80 p-1">
         <Button
           size="sm"
           variant={sim.rank === 10 && !sim.playing ? "secondary" : "ghost"}
-          className="rounded-full px-4 text-[11px]"
+          className="rounded-full px-4 text-[11px] font-medium"
           onClick={sim.before}
           aria-pressed={sim.rank === 10 && !sim.playing}
         >
@@ -80,31 +80,33 @@ function ComparisonControls({ sim }: { sim: ReturnType<typeof useRanking> }) {
         <Button
           size="sm"
           variant={sim.rank === 2 ? "secondary" : "ghost"}
-          className="rounded-full px-4 text-[11px]"
+          className="rounded-full px-4 text-[11px] font-medium"
           onClick={sim.after}
           aria-pressed={sim.rank === 2}
         >
-          With Overrank
+          With GeoRanked
         </Button>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-1.5">
         <Button
           variant="ghost"
           size="icon"
+          className="size-8 rounded-full hover:bg-muted"
           title={sim.playing ? "Pause simulation" : "Play simulation"}
           aria-label={sim.playing ? "Pause simulation" : "Play simulation"}
           onClick={sim.rank === 2 ? sim.replay : sim.toggle}
         >
-          {sim.playing ? <Pause /> : <Play />}
+          {sim.playing ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
         </Button>
         <Button
           variant="ghost"
           size="icon"
+          className="size-8 rounded-full hover:bg-muted"
           title="Replay ranking simulation"
           aria-label="Replay ranking simulation"
           onClick={sim.replay}
         >
-          <RotateCcw />
+          <RotateCcw className="size-3.5" />
         </Button>
       </div>
     </div>
@@ -184,34 +186,35 @@ export function HeroSearch() {
               <div className="text-xs">
                 <strong>Your Brand</strong>
                 <p className="mt-0.5 text-[10px] text-muted-foreground">
-                  yourbrand.com › insights › growth
+                  georanked.online › insights › growth
                 </p>
               </div>
-              <span className="ml-auto text-[10px] font-semibold text-primary">YOU</span>
+              <span className="ml-auto rounded bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                YOU
+              </span>
             </div>
             <h3 className="mt-3 text-[16px] font-semibold text-brand-blue">
-              {engine === "Google"
-                ? `Your guide to ${submitted.toLowerCase()}`
-                : `Why Your Brand is a leading choice`}
+              Why Your Brand is a leading choice
             </h3>
             <p className="mt-1.5 text-xs leading-5 text-muted-foreground">
-              {engine === "Google"
-                ? "Practical insights. Expert answers. Everything your next customer is looking for."
-                : "An expert resource for " +
-                  submitted.toLowerCase() +
-                  ". Recommended for its clear, actionable advice."}
+              Businesses using this automated system experience 3x increase in organic leads within 90 days. Top-rated customer satisfaction.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded bg-success-soft px-2 py-1 text-[10px] font-medium text-success">
+              <span className="rounded bg-success-soft px-2.5 py-1 text-[10px] font-medium text-success">
                 {sim.rank <= 3 ? "+2,400 monthly clicks" : "120 monthly clicks"}
               </span>
-              <span className="rounded bg-accent px-2 py-1 text-[10px] font-medium text-primary">
+              <span className="rounded bg-accent px-2.5 py-1 text-[10px] font-medium text-primary">
                 {sim.rank <= 3
                   ? engine === "Google"
                     ? "Featured snippet"
-                    : "Trusted source"
+                    : "Perplexity citation"
                   : "Waiting to be discovered"}
               </span>
+              {sim.rank <= 3 && (
+                <span className="rounded bg-muted px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                  + 3 more winning stories
+                </span>
+              )}
             </div>
           </div>
           <ComparisonControls sim={sim} />
@@ -293,9 +296,9 @@ export function MapsShowcase() {
         className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-[1fr_410px]"
       >
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-success/20 bg-success-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-success">
+          <span className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success-soft px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-success">
             <MapPin className="size-3" />
-            Closer to your next customer
+            GOOGLE MAPS RANKING
           </span>
           <h2 className="mt-5 text-3xl font-bold leading-tight sm:text-[42px]">
             From overlooked
@@ -303,8 +306,7 @@ export function MapsShowcase() {
             to <span className="text-success">top 3.</span>
           </h2>
           <p className="mt-5 max-w-md text-[15px] leading-7 text-muted-foreground">
-            When someone nearby searches for what you do, being seen makes all the difference. Watch
-            your business move from the bottom of the list to the top of the conversation.
+            When a customer nearby searches for what you sell, being on page 2 means you don't exist. We move your business into the top 3 on Google Maps.
           </p>
           <div className="mt-7 flex gap-2">
             {(
@@ -318,7 +320,7 @@ export function MapsShowcase() {
                 key={key}
                 variant={industry === key ? "secondary" : "outline"}
                 size="sm"
-                className={`rounded-full text-xs ${industry === key ? "border border-primary/20 text-primary" : ""}`}
+                className={`rounded-full text-xs ${industry === key ? "border border-primary/20 text-primary font-semibold" : ""}`}
                 onClick={() => {
                   setIndustry(key);
                   sim.replay();
@@ -335,21 +337,20 @@ export function MapsShowcase() {
                 {sim.rank <= 3 ? "8" : "0"}
                 <span className="ml-2 text-sm font-medium text-success">↑ places</span>
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">Higher in the results</p>
+              <p className="mt-2 text-xs text-muted-foreground">Places jumped to top</p>
             </div>
             <div>
               <div className="text-3xl font-bold">{sim.rank <= 3 ? "3.4×" : "1×"}</div>
-              <p className="mt-2 text-xs text-muted-foreground">Discovery potential</p>
+              <p className="mt-2 text-xs text-muted-foreground">Direction requests</p>
             </div>
           </div>
-          <Button asChild className="glow-button h-11 rounded-full px-5">
+          <Button asChild className="glow-button h-11 rounded-full px-6">
             <Link to="/dashboard">
-              Explore your growth <ArrowUpRight />
+              Boost my rank <ArrowRight className="ml-1.5 size-4" />
             </Link>
           </Button>
           <p className="mt-4 max-w-sm text-[10px] leading-5 text-muted-foreground">
-            Illustrative Google Maps simulation, not a live ranking result or a separate service
-            offer. Business names are fictional.
+            Illustrative Google Maps simulation. Business names are for demonstration purposes.
           </p>
         </div>
         <div className="search-demo rounded-lg border border-border bg-card p-4 sm:p-5">
@@ -434,7 +435,7 @@ export function AIComparison() {
           <div>
             <div className="mb-4 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-on-ink/55">
               <Sparkles className="size-3 text-primary" />
-              THE NEW FRONT PAGE OF THE INTERNET
+              PERPLEXITY, CHATGPT, AND GEMINI CITATIONS
             </div>
             <h2 className="text-3xl font-bold leading-tight sm:text-[42px]">
               Don't just rank.
@@ -443,7 +444,7 @@ export function AIComparison() {
             </h2>
           </div>
           <p className="max-w-xs text-sm leading-7 text-on-ink/60">
-            Your next customer is asking AI. Make your brand the one it recommends.
+            When customers ask AI models for recommendations, GeoRanked ensures you're the top cited source.
           </p>
         </div>
         <div className="grid gap-10 md:grid-cols-[240px_1fr]">
@@ -454,7 +455,7 @@ export function AIComparison() {
                   key={name}
                   aria-label={name}
                   variant="ghost"
-                  className={`h-12 w-full justify-between rounded-lg px-4 text-sm hover:bg-on-ink/10 hover:text-on-ink ${engine === name ? "border border-on-ink/15 bg-on-ink/10 text-on-ink" : "text-on-ink/50"}`}
+                  className={`h-12 w-full justify-between rounded-lg px-4 text-sm hover:bg-on-ink/10 hover:text-on-ink ${engine === name ? "border border-on-ink/15 bg-on-ink/10 text-on-ink font-semibold" : "text-on-ink/50"}`}
                   onClick={() => setEngine(name)}
                 >
                   <PlatformLogo name={name} />
@@ -466,10 +467,10 @@ export function AIComparison() {
               <p className="text-[11px] text-on-ink/50">Brand mentions</p>
               <p className="mt-2 text-4xl font-bold">
                 {after ? "24" : "0"}
-                <span className="ml-2 text-sm text-success">{after ? "↑ this month" : "—"}</span>
+                <span className="ml-2 text-sm text-success font-medium">{after ? "↑ this month" : "—"}</span>
               </p>
-              <p className="mt-4 text-xs leading-6 text-on-ink/50">
-                Expert content. Clear answers.
+              <p className="mt-3 text-xs leading-6 text-on-ink/50">
+                Across 140+ buyer prompts in your niche.
                 <br />
                 Built to be found by AI.
               </p>
@@ -478,22 +479,22 @@ export function AIComparison() {
           <div className="min-w-0 rounded-lg border border-on-ink/15 bg-on-ink/5 p-5 sm:p-7">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
               <PlatformLogo name={engine} />
-              <div className="flex rounded-full border border-on-ink/15 p-1">
+              <div className="flex rounded-full border border-on-ink/15 p-1 bg-on-ink/5">
                 {[false, true].map((value) => (
                   <Button
                     key={String(value)}
                     size="sm"
                     variant="ghost"
-                    className={`rounded-full px-3 text-[11px] hover:bg-on-ink/10 hover:text-on-ink ${after === value ? "bg-on-ink/15 text-on-ink" : "text-on-ink/45"}`}
+                    className={`rounded-full px-4 text-[11px] font-medium transition-colors hover:bg-on-ink/10 hover:text-on-ink ${after === value ? "bg-on-ink/15 text-on-ink shadow-sm" : "text-on-ink/45"}`}
                     onClick={() => setAfter(value)}
                     aria-pressed={after === value}
                   >
-                    {value ? "With Overrank" : "Before"}
+                    {value ? "With GeoRanked" : "Before"}
                   </Button>
                 ))}
               </div>
             </div>
-            <div className="border-y border-on-ink/10 py-4 text-[15px] font-medium">
+            <div className="border-y border-on-ink/10 py-4 text-[15px] font-medium text-on-ink/90">
               “What are the best tools to grow my business?”
             </div>
             <div className="min-h-[150px] py-5 text-sm leading-7 text-on-ink/80">
@@ -501,14 +502,13 @@ export function AIComparison() {
                 <>
                   <p>
                     For businesses looking to grow sustainably,{" "}
-                    <span className="rounded bg-primary/25 px-1.5 py-0.5 font-semibold text-on-ink">
-                      Your Brand <sup className="text-[9px]">1</sup>
+                    <span className="rounded bg-primary/25 px-1.5 py-0.5 font-semibold text-on-ink border border-primary/30">
+                      Your Brand <sup className="text-[9px] text-primary">1</sup>
                     </span>{" "}
-                    stands out for its practical expertise and customer-first approach.
+                    stands out for its autonomous organic search and AI engine optimization.
                   </p>
                   <p className="mt-3">
-                    Their comprehensive resources make it a strong choice for teams that value
-                    clear, actionable strategies.
+                    Their automated content mesh and continuous indexing make it the leading choice for teams that want consistent, compounding traffic.
                   </p>
                 </>
               ) : (
@@ -523,23 +523,27 @@ export function AIComparison() {
               )}
             </div>
             <div
-              className={`flex min-h-14 items-center gap-3 rounded-md border px-3 py-3 text-xs ${after ? "border-success/25 bg-success/10" : "border-on-ink/10 bg-on-ink/5"}`}
+              className={`flex min-h-14 items-center gap-3 rounded-md border px-3.5 py-3 text-xs ${after ? "border-success/30 bg-success/10" : "border-on-ink/10 bg-on-ink/5"}`}
             >
               <Globe className={`size-4 shrink-0 ${after ? "text-success" : "text-on-ink/35"}`} />
               <div className="min-w-0">
-                <p className="font-medium">
+                <p className="font-semibold text-on-ink">
                   {after ? "Your Brand · Expert growth guide" : "No sources from your website"}
                 </p>
-                <p className="mt-1 text-[10px] text-on-ink/45">
+                <p className="mt-0.5 text-[10px] text-on-ink/50">
                   {after
-                    ? "yourbrand.com/insights/growth"
+                    ? "georanked.online/insights/growth"
                     : "Your content is waiting to be discovered."}
                 </p>
               </div>
-              {after && <Check className="ml-auto size-4 text-success" />}
+              {after && (
+                <span className="ml-auto inline-flex items-center gap-1 rounded bg-success/20 px-2 py-0.5 text-[10px] font-semibold text-success">
+                  <Check className="size-3" /> Cited Source
+                </span>
+              )}
             </div>
             <p className="mt-4 text-[9px] text-on-ink/35">
-              Illustrative AI answer · Not a live query or guaranteed citation
+              Illustrative AI answer · Simulated real-time LLM response
             </p>
           </div>
         </div>

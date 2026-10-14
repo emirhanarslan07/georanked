@@ -4,15 +4,15 @@ import { Results, FAQ } from "@/components/marketing/sections";
 export const Route = createFileRoute("/results")({
   head: () => ({
     meta: [
-      { title: "Overrank Results — Overrank" },
+      { title: "GeoRanked Results — GeoRanked" },
       {
         name: "description",
-        content: "Explore illustrative organic search growth and AI visibility.",
+        content: "Explore illustrative organic search growth and AI visibility with GeoRanked.",
       },
-      { property: "og:title", content: "Overrank Results — Overrank" },
+      { property: "og:title", content: "GeoRanked Results — GeoRanked" },
       {
         property: "og:description",
-        content: "Explore illustrative organic search growth and AI visibility.",
+        content: "Explore illustrative organic search growth and AI visibility with GeoRanked.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
