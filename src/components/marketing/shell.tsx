@@ -5,9 +5,11 @@ import { Brand } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 const nav = [
   { to: "/how-it-works", name: "How it works" },
-  { to: "/ai-search", name: "AI Search" },
+  { to: "/vault-ai", name: "VaultAI" },
+  { to: "/lead-reply", name: "LeadReply" },
+  { to: "/sitepeel", name: "Sitepeel" },
+  { to: "/formpulse", name: "FormPulse" },
   { to: "/pricing", name: "Pricing" },
-  { to: "/results", name: "Results" },
 ] as const;
 export function MarketingShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -67,11 +69,13 @@ export function MarketingShell({ children }: { children: ReactNode }) {
               Autonomous SEO & Generative Engine Optimization for modern brands.
             </p>
           </div>
-          <div className="flex flex-wrap gap-7 text-xs font-medium text-muted-foreground">
-            <Link to="/how-it-works" className="hover:text-primary transition-colors">How it works</Link>
-            <Link to="/ai-search" className="hover:text-primary transition-colors">AI Search</Link>
+          <div className="flex flex-wrap gap-5 text-xs font-medium text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">GeoRanked</Link>
+            <Link to="/vault-ai" className="hover:text-primary transition-colors">VaultAI</Link>
+            <Link to="/lead-reply" className="hover:text-primary transition-colors">LeadReply AI</Link>
+            <Link to="/sitepeel" className="hover:text-primary transition-colors">Sitepeel UI</Link>
+            <Link to="/formpulse" className="hover:text-primary transition-colors">FormPulse AI</Link>
             <Link to="/pricing" className="hover:text-primary transition-colors">Pricing</Link>
-            <Link to="/results" className="hover:text-primary transition-colors">Results</Link>
             <Link to="/dashboard" className="text-primary hover:underline">
               Live demo ↗
             </Link>
