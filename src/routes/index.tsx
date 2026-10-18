@@ -39,15 +39,16 @@ export const Route = createFileRoute("/")({
 });
 
 import { useState } from "react";
+import { TrialSignupModal } from "@/components/TrialSignupModal";
 
 function Index() {
   const [domain, setDomain] = useState("");
+  const [showTrialModal, setShowTrialModal] = useState(false);
 
   const handleHeroSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!domain.trim()) return;
-    const clean = domain.trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
-    window.location.href = `/free-audit?domain=${encodeURIComponent(clean)}`;
+    setShowTrialModal(true);
   };
 
   return (
@@ -202,6 +203,12 @@ function Index() {
           </div>
         </div>
       </section>
+
+      <TrialSignupModal
+        isOpen={showTrialModal}
+        onClose={() => setShowTrialModal(false)}
+        defaultDomain={domain}
+      />
     </MarketingShell>
   );
 }

@@ -3,6 +3,8 @@ import { ArrowUpRight, Menu } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Brand } from "@/components/brand";
 import { Button } from "@/components/ui/button";
+import { TrialSignupModal } from "@/components/TrialSignupModal";
+
 const nav = [
   { to: "/free-audit", name: "Free Audit" },
   { to: "/affiliates", name: "Affiliates" },
@@ -11,8 +13,11 @@ const nav = [
   { to: "/ai-search", name: "AI Search Engines" },
   { to: "/pricing", name: "Pricing" },
 ] as const;
+
 export function MarketingShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [showTrialModal, setShowTrialModal] = useState(false);
+
   return (
     <>
       <header className="fixed inset-x-0 top-4 z-30 px-4">
@@ -31,13 +36,18 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" className="hidden text-xs lg:inline-flex">
-              <Link to="/dashboard">Live demo</Link>
+            <Button
+              variant="ghost"
+              className="text-xs font-semibold hover:text-primary"
+              onClick={() => setShowTrialModal(true)}
+            >
+              Sign in
             </Button>
-            <Button asChild className="glow-button rounded-full px-3 text-xs sm:px-5">
-              <Link to="/free-audit">
-                Get Free Audit <ArrowUpRight />
-              </Link>
+            <Button
+              className="glow-button rounded-full px-3 text-xs font-bold sm:px-5"
+              onClick={() => setShowTrialModal(true)}
+            >
+              Start Free Trial <ArrowUpRight className="ml-1 size-3.5" />
             </Button>
             <Button
               className="md:hidden"
@@ -88,6 +98,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           </div>
         </div>
       </footer>
+      <TrialSignupModal isOpen={showTrialModal} onClose={() => setShowTrialModal(false)} />
     </>
   );
 }

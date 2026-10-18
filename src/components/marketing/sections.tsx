@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { AIComparison } from "@/components/marketing/search-experience";
 import { TrafficChart } from "@/components/traffic-chart";
 import { EarlyAccessModal } from "@/components/EarlyAccessModal";
+import { TrialSignupModal } from "@/components/TrialSignupModal";
 export function SectionHeading({
   label,
   title,
@@ -126,6 +127,7 @@ export function Results() {
 }
 export function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showTrialModal, setShowTrialModal] = useState(false);
 
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-6 py-20 scroll-mt-24">
@@ -137,47 +139,50 @@ export function Pricing() {
       <div className="grid items-stretch gap-5 md:grid-cols-3">
         {[
           {
-            name: "Starter",
-            price: 39,
-            desc: "Plant the seeds for organic growth.",
+            name: "Starter Autopilot",
+            price: 79,
+            desc: "Plant the seeds for compounding organic & AI growth.",
             features: [
-              "10 articles per month",
-              "AI keyword research",
-              "Automatic CMS publishing",
-              "SEO-optimized images",
+              "30 articles per month",
+              "AI keyword & citation research",
+              "Automatic CMS publishing (WP, Webflow)",
+              "SEO-optimized images & schema",
+              "Perplexity & ChatGPT citations",
               "1 website",
             ],
           },
           {
             name: "Growth GEO",
-            price: 79,
-            desc: "Own the conversation. Everywhere.",
+            price: 129,
+            desc: "Own the conversation across ChatGPT, Perplexity & Google.",
             features: [
-              "30 articles per month",
+              "60 articles per month",
               "Everything in Starter",
-              "Perplexity & ChatGPT citations",
               "Smart internal linking mesh",
-              "Priority content generation",
+              "Priority content generation engine",
+              "Topical authority clustering",
+              "3 websites",
             ],
           },
           {
             name: "Scale Agency",
-            price: 149,
-            desc: "More sites. More reach. Less work.",
+            price: 249,
+            desc: "High volume portfolio reach on complete autopilot.",
             features: [
-              "60 articles per month",
+              "150 articles per month",
               "Everything in Growth GEO",
-              "5 websites",
-              "Telegram 1-click approval",
-              "Agency-ready workflows",
+              "10 websites",
+              "Telegram 1-click publishing approval",
+              "Dedicated account manager & API",
+              "Agency-ready white-label workflows",
             ],
           },
         ].map((p, i) => (
           <div
             key={p.name}
-            className={`relative flex flex-col rounded-lg border bg-card p-7 transition-transform hover:-translate-y-1 ${i === 1 ? "border-primary shadow-lg shadow-primary/10" : "border-border"}`}
+            className={`relative flex flex-col rounded-lg border bg-card p-7 transition-transform hover:-translate-y-1 ${i === 0 ? "border-primary shadow-lg shadow-primary/10" : "border-border"}`}
           >
-            {i === 1 && (
+            {i === 0 && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-4 py-1 text-[11px] font-semibold text-primary-foreground">
                 ✦ Most popular
               </span>
@@ -189,17 +194,11 @@ export function Pricing() {
               <span className="text-sm text-muted-foreground"> / month</span>
             </div>
             <Button
-              variant={i === 1 ? "default" : "outline"}
-              className={i === 1 ? "glow-button font-bold" : "font-semibold"}
-              asChild
+              variant={i === 0 ? "default" : "outline"}
+              className={i === 0 ? "glow-button font-bold" : "font-semibold"}
+              onClick={() => setShowTrialModal(true)}
             >
-              <a
-                href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                data-polar-checkout
-                data-polar-checkout-theme="dark"
-              >
-                Get started <ArrowRight className="ml-1 size-4" />
-              </a>
+              Start 3-Day Free Trial <ArrowRight className="ml-1 size-4" />
             </Button>
             <ul className="mt-7 space-y-4">
               {p.features.map((f) => (
@@ -214,22 +213,20 @@ export function Pricing() {
       </div>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
-          <Check className="size-4 text-success" /> 30-day money-back guarantee
+          <Check className="size-4 text-success" /> 3-day free trial (3 free articles)
         </span>
         <span className="flex items-center gap-2">
-          <Check className="size-4 text-success" /> No credit card required to test
+          <Check className="size-4 text-success" /> No credit card required
         </span>
         <span className="flex items-center gap-2">
           <Check className="size-4 text-success" /> Cancel anytime with 1 click
         </span>
       </div>
 
-      {selectedPlan && (
-        <EarlyAccessModal
-          planName={selectedPlan}
-          onClose={() => setSelectedPlan(null)}
-        />
-      )}
+      <TrialSignupModal
+        isOpen={showTrialModal}
+        onClose={() => setShowTrialModal(false)}
+      />
     </section>
   );
 }

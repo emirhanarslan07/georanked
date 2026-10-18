@@ -147,12 +147,30 @@ function Dashboard() {
   const [connecting, setConnecting] = useState(false);
   const [toast, setToast] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [userDomain, setUserDomain] = useState("yourbrand.com");
+  const [userEmail, setUserEmail] = useState("");
+  const [freeArticlesLeft, setFreeArticlesLeft] = useState(3);
+  const [isTrialActive, setIsTrialActive] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
+      const urlDomain = params.get("domain");
+      const urlEmail = params.get("email");
+      const saved = localStorage.getItem("georanked_session");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.domain) setUserDomain(parsed.domain);
+          if (parsed.email) setUserEmail(parsed.email);
+          if (typeof parsed.freeArticlesLeft === "number") setFreeArticlesLeft(parsed.freeArticlesLeft);
+        } catch (e) {}
+      }
+      if (urlDomain) setUserDomain(urlDomain);
+      if (urlEmail) setUserEmail(urlEmail);
       if (params.get("payment") === "success") {
         setPaymentSuccess(true);
+        setIsTrialActive(false);
       }
     }
   }, []);
@@ -173,10 +191,24 @@ function Dashboard() {
           keyword,
           words: 1864,
           status: "Draft",
-          date: "Oct 13",
+          date: "Oct 18",
         };
         setArticles((old) => [a, ...old]);
         setGenerated(a);
+        setFreeArticlesLeft((prev) => {
+          const next = Math.max(0, prev - 1);
+          if (typeof window !== "undefined") {
+            const saved = localStorage.getItem("georanked_session");
+            if (saved) {
+              try {
+                const parsed = JSON.parse(saved);
+                parsed.freeArticlesLeft = next;
+                localStorage.setItem("georanked_session", JSON.stringify(parsed));
+              } catch (e) {}
+            }
+          }
+          return next;
+        });
       }
       setStage(stage + 1);
     }, 1000);
@@ -245,8 +277,8 @@ function Dashboard() {
             <Globe className="size-4" />
           </span>
           <div>
-            <p className="text-xs font-semibold">Your Brand</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">yourbrand.com</p>
+            <p className="text-xs font-semibold capitalize">{userDomain.split('.')[0] || "Your Brand"}</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">{userDomain}</p>
           </div>
           <ChevronDown className="ml-auto size-3 text-muted-foreground" />
         </div>
@@ -358,6 +390,32 @@ function Dashboard() {
                 onClick={() => setPaymentSuccess(false)}
               >
                 Dismiss
+              </Button>
+            </div>
+          )}
+          {isTrialActive && !paymentSuccess && (
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/10 p-4 text-foreground shadow-sm">
+              <div className="flex items-start sm:items-center gap-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-xs shadow">
+                  3D
+                </span>
+                <div>
+                  <h3 className="font-bold text-xs sm:text-sm">
+                    3-Day Free Trial Active for <span className="text-primary underline">{userDomain}</span>
+                  </h3>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
+                    You have <strong className="text-foreground">{freeArticlesLeft} free trial articles</strong> remaining. Generate your first high-authority article now to see how GeoRanked captures citations.
+                  </p>
+                </div>
+              </div>
+              <Button size="sm" className="glow-button shrink-0 text-xs font-bold" asChild>
+                <a
+                  href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
+                  data-polar-checkout
+                  data-polar-checkout-theme="dark"
+                >
+                  Activate Autopilot ($79/mo) <ArrowRight className="ml-1 size-3.5" />
+                </a>
               </Button>
             </div>
           )}
@@ -896,20 +954,39 @@ function Dashboard() {
                   what works, and keep your content useful and up to date.
                 </p>
               </article>
+              <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/10 p-4">
+                <div>
+                  <h4 className="font-bold text-xs text-foreground">
+                    Ready to publish automatically to {userDomain}?
+                  </h4>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Connect WordPress, Webflow or Shopify to turn on continuous autonomous publishing without watermarks.
+                  </p>
+                </div>
+                <Button size="sm" className="glow-button shrink-0 text-xs font-bold" asChild>
+                  <a
+                    href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
+                    data-polar-checkout
+                    data-polar-checkout-theme="dark"
+                  >
+                    Activate Autopilot ($79/mo) <ArrowRight className="ml-1 size-3.5" />
+                  </a>
+                </Button>
+              </div>
               {selected.status === "Draft" && (
                 <Button
                   onClick={() => {
                     setArticles((arr) =>
                       arr.map((a) =>
-                        a.id === selected.id ? { ...a, status: "Scheduled", date: "Oct 14" } : a,
+                        a.id === selected.id ? { ...a, status: "Scheduled", date: "Oct 18" } : a,
                       ),
                     );
-                    setSelected({ ...selected, status: "Scheduled", date: "Oct 14" });
-                    setToast("Article scheduled for October 14 in demo");
+                    setSelected({ ...selected, status: "Scheduled", date: "Oct 18" });
+                    setToast("Article scheduled for automated publishing");
                   }}
                 >
                   <CalendarDays />
-                  Schedule for Oct 14
+                  Schedule on Autopilot
                 </Button>
               )}
             </>

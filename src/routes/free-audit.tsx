@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/marketing/shell";
 import { EarlyAccessModal } from "@/components/EarlyAccessModal";
+import { TrialSignupModal } from "@/components/TrialSignupModal";
 
 export const Route = createFileRoute("/free-audit")({
   head: () => ({
@@ -43,6 +44,7 @@ function FreeAuditPage() {
   const [scanProgress, setScanProgress] = useState(0);
   const [auditResult, setAuditResult] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showTrialModal, setShowTrialModal] = useState(false);
 
   const scanSteps = [
     "Connecting to domain and extracting metadata...",
@@ -393,22 +395,16 @@ function FreeAuditPage() {
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
                   GeoRanked autonomously writes, structures, and publishes 30 citation-targeted
                   content clusters directly to your site every month. No expensive agency retainers.
-                  Start getting cited for just <strong>$39/month</strong>.
+                  Start your <strong>3-day free trial</strong> with 3 free articles.
                 </p>
 
                 <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button
                     size="lg"
                     className="glow-button h-13 rounded-full px-8 text-sm font-bold w-full sm:w-auto"
-                    asChild
+                    onClick={() => setShowTrialModal(true)}
                   >
-                    <a
-                      href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                      data-polar-checkout
-                      data-polar-checkout-theme="dark"
-                    >
-                      Unlock Full Teardown & Fix Citations ($39/mo) <ArrowRight className="ml-2 size-4" />
-                    </a>
+                    Start 3-Day Free Trial (3 Free Articles) <ArrowRight className="ml-2 size-4" />
                   </Button>
                   <Button
                     size="lg"
@@ -416,7 +412,7 @@ function FreeAuditPage() {
                     className="h-13 rounded-full px-6 text-sm font-medium w-full sm:w-auto"
                     asChild
                   >
-                    <Link to="/dashboard">
+                    <Link to={`/dashboard?domain=${encodeURIComponent(domainInput || 'yourbrand.com')}`}>
                       Explore Interactive Dashboard ↗
                     </Link>
                   </Button>
@@ -424,10 +420,10 @@ function FreeAuditPage() {
 
                 <div className="mt-5 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="size-4 text-success" /> 30-day money-back guarantee
+                    <ShieldCheck className="size-4 text-success" /> 3 free articles included
                   </span>
                   <span>•</span>
-                  <span>Setup in under 5 minutes</span>
+                  <span>No credit card required</span>
                   <span>•</span>
                   <span>Cancel anytime</span>
                 </div>
@@ -442,12 +438,11 @@ function FreeAuditPage() {
         </div>
       </div>
 
-      {showModal && (
-        <EarlyAccessModal
-          planName="Starter GEO ($39/mo)"
-          onClose={() => setShowModal(false)}
-        />
-      )}
+      <TrialSignupModal
+        isOpen={showTrialModal}
+        onClose={() => setShowTrialModal(false)}
+        defaultDomain={domainInput}
+      />
     </MarketingShell>
   );
 }
