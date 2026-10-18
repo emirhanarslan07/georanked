@@ -404,8 +404,8 @@ function FreeAuditPage() {
                   >
                     <a
                       href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      data-polar-checkout
+                      data-polar-checkout-theme="dark"
                     >
                       Unlock Full Teardown & Fix Citations ($39/mo) <ArrowRight className="ml-2 size-4" />
                     </a>

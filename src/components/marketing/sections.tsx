@@ -195,8 +195,8 @@ export function Pricing() {
             >
               <a
                 href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                target="_blank"
-                rel="noopener noreferrer"
+                data-polar-checkout
+                data-polar-checkout-theme="dark"
               >
                 Get started <ArrowRight className="ml-1 size-4" />
               </a>

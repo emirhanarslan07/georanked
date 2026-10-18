@@ -291,8 +291,8 @@ function Dashboard() {
             <Button asChild variant="link" className="mt-2 h-auto p-0 text-[11px]">
               <a
                 href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                target="_blank"
-                rel="noopener noreferrer"
+                data-polar-checkout
+                data-polar-checkout-theme="dark"
               >
                 Upgrade plan <ArrowUpRight className="ml-1 size-3 inline" />
               </a>
