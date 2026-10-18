@@ -146,6 +146,17 @@ function Dashboard() {
   const [connectError, setConnectError] = useState("");
   const [connecting, setConnecting] = useState(false);
   const [toast, setToast] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("payment") === "success") {
+        setPaymentSuccess(true);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(""), 4000);
@@ -278,9 +289,13 @@ function Dashboard() {
               <div className="h-full w-1/4 rounded-full bg-primary" />
             </div>
             <Button asChild variant="link" className="mt-2 h-auto p-0 text-[11px]">
-              <Link to="/pricing">
-                Explore plans <ArrowUpRight />
-              </Link>
+              <a
+                href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Upgrade plan <ArrowUpRight className="ml-1 size-3 inline" />
+              </a>
             </Button>
           </div>
           <Link to="/" className="mt-5 flex items-center gap-2 px-3 text-xs text-muted-foreground">
@@ -323,6 +338,29 @@ function Dashboard() {
           </span>
         </header>
         <main className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+          {paymentSuccess && (
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5 text-emerald-950 shadow-md dark:text-emerald-100 animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-start sm:items-center gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm">
+                  <Check className="size-5" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-sm sm:text-base">🎉 Subscription Activated! Welcome to GeoRanked Pro</h3>
+                  <p className="mt-0.5 text-xs text-emerald-900/80 dark:text-emerald-200/90 leading-relaxed">
+                    Your Polar checkout was confirmed. Continuous Perplexity & ChatGPT citation indexing and autonomous monthly articles are now unlocked for your domain.
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="self-end sm:self-center border-emerald-500/40 bg-background/80 hover:bg-emerald-500/20 text-xs font-semibold"
+                onClick={() => setPaymentSuccess(false)}
+              >
+                Dismiss
+              </Button>
+            </div>
+          )}
           <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold">

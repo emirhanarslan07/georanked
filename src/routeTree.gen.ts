@@ -10,19 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AffiliatesRouteImport } from './routes/affiliates'
 import { Route as AiSearchRouteImport } from './routes/ai-search'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as FormpulseRouteImport } from './routes/formpulse'
+import { Route as FreeAuditRouteImport } from './routes/free-audit'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as LeadReplyRouteImport } from './routes/lead-reply'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResultsRouteImport } from './routes/results'
-import { Route as SitepeelRouteImport } from './routes/sitepeel'
-import { Route as VaultAiRouteImport } from './routes/vault-ai'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AffiliatesRoute = AffiliatesRouteImport.update({
+  id: '/affiliates',
+  path: '/affiliates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiSearchRoute = AiSearchRouteImport.update({
@@ -35,19 +38,14 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FormpulseRoute = FormpulseRouteImport.update({
-  id: '/formpulse',
-  path: '/formpulse',
+const FreeAuditRoute = FreeAuditRouteImport.update({
+  id: '/free-audit',
+  path: '/free-audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LeadReplyRoute = LeadReplyRouteImport.update({
-  id: '/lead-reply',
-  path: '/lead-reply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -60,104 +58,80 @@ const ResultsRoute = ResultsRouteImport.update({
   path: '/results',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitepeelRoute = SitepeelRouteImport.update({
-  id: '/sitepeel',
-  path: '/sitepeel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VaultAiRoute = VaultAiRouteImport.update({
-  id: '/vault-ai',
-  path: '/vault-ai',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/affiliates': typeof AffiliatesRoute
   '/ai-search': typeof AiSearchRoute
   '/dashboard': typeof DashboardRoute
-  '/formpulse': typeof FormpulseRoute
+  '/free-audit': typeof FreeAuditRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/lead-reply': typeof LeadReplyRoute
   '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
-  '/sitepeel': typeof SitepeelRoute
-  '/vault-ai': typeof VaultAiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/affiliates': typeof AffiliatesRoute
   '/ai-search': typeof AiSearchRoute
   '/dashboard': typeof DashboardRoute
-  '/formpulse': typeof FormpulseRoute
+  '/free-audit': typeof FreeAuditRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/lead-reply': typeof LeadReplyRoute
   '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
-  '/sitepeel': typeof SitepeelRoute
-  '/vault-ai': typeof VaultAiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/affiliates': typeof AffiliatesRoute
   '/ai-search': typeof AiSearchRoute
   '/dashboard': typeof DashboardRoute
-  '/formpulse': typeof FormpulseRoute
+  '/free-audit': typeof FreeAuditRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/lead-reply': typeof LeadReplyRoute
   '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
-  '/sitepeel': typeof SitepeelRoute
-  '/vault-ai': typeof VaultAiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/affiliates'
     | '/ai-search'
     | '/dashboard'
-    | '/formpulse'
+    | '/free-audit'
     | '/how-it-works'
-    | '/lead-reply'
     | '/pricing'
     | '/results'
-    | '/sitepeel'
-    | '/vault-ai'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/affiliates'
     | '/ai-search'
     | '/dashboard'
-    | '/formpulse'
+    | '/free-audit'
     | '/how-it-works'
-    | '/lead-reply'
     | '/pricing'
     | '/results'
-    | '/sitepeel'
-    | '/vault-ai'
   id:
     | '__root__'
     | '/'
+    | '/affiliates'
     | '/ai-search'
     | '/dashboard'
-    | '/formpulse'
+    | '/free-audit'
     | '/how-it-works'
-    | '/lead-reply'
     | '/pricing'
     | '/results'
-    | '/sitepeel'
-    | '/vault-ai'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AffiliatesRoute: typeof AffiliatesRoute
   AiSearchRoute: typeof AiSearchRoute
   DashboardRoute: typeof DashboardRoute
-  FormpulseRoute: typeof FormpulseRoute
+  FreeAuditRoute: typeof FreeAuditRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  LeadReplyRoute: typeof LeadReplyRoute
   PricingRoute: typeof PricingRoute
   ResultsRoute: typeof ResultsRoute
-  SitepeelRoute: typeof SitepeelRoute
-  VaultAiRoute: typeof VaultAiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/affiliates': {
+      id: '/affiliates'
+      path: '/affiliates'
+      fullPath: '/affiliates'
+      preLoaderRoute: typeof AffiliatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai-search': {
@@ -183,11 +164,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/formpulse': {
-      id: '/formpulse'
-      path: '/formpulse'
-      fullPath: '/formpulse'
-      preLoaderRoute: typeof FormpulseRouteImport
+    '/free-audit': {
+      id: '/free-audit'
+      path: '/free-audit'
+      fullPath: '/free-audit'
+      preLoaderRoute: typeof FreeAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -195,13 +176,6 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lead-reply': {
-      id: '/lead-reply'
-      path: '/lead-reply'
-      fullPath: '/lead-reply'
-      preLoaderRoute: typeof LeadReplyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -218,34 +192,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitepeel': {
-      id: '/sitepeel'
-      path: '/sitepeel'
-      fullPath: '/sitepeel'
-      preLoaderRoute: typeof SitepeelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/vault-ai': {
-      id: '/vault-ai'
-      path: '/vault-ai'
-      fullPath: '/vault-ai'
-      preLoaderRoute: typeof VaultAiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AffiliatesRoute: AffiliatesRoute,
   AiSearchRoute: AiSearchRoute,
   DashboardRoute: DashboardRoute,
-  FormpulseRoute: FormpulseRoute,
+  FreeAuditRoute: FreeAuditRoute,
   HowItWorksRoute: HowItWorksRoute,
-  LeadReplyRoute: LeadReplyRoute,
   PricingRoute: PricingRoute,
   ResultsRoute: ResultsRoute,
-  SitepeelRoute: SitepeelRoute,
-  VaultAiRoute: VaultAiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

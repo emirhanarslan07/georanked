@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/marketing/shell";
-import { PlatformLogo } from "@/components/brand";
+import { PlatformLogo, TrustedLogos } from "@/components/brand";
 import { HowItWorks, AISearch, Results, Pricing, FAQ } from "@/components/marketing/sections";
-import { HeroSearch, MapsShowcase } from "@/components/marketing/search-experience";
+import { HeroSearch, MapsShowcase, InteractiveRoiCalculator } from "@/components/marketing/search-experience";
 import heroBackground from "@/assets/search-background.jpg";
 
 export const Route = createFileRoute("/")({
@@ -38,7 +38,18 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+import { useState } from "react";
+
 function Index() {
+  const [domain, setDomain] = useState("");
+
+  const handleHeroSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!domain.trim()) return;
+    const clean = domain.trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
+    window.location.href = `/free-audit?domain=${encodeURIComponent(clean)}`;
+  };
+
   return (
     <MarketingShell>
       <section className="hero-surface overflow-hidden px-5 pb-10 pt-32 sm:pt-36">
@@ -55,28 +66,42 @@ function Index() {
               <br />
               <span className="brand-gradient">Automatically.</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-[540px] text-[15px] leading-7 text-muted-foreground">
-              Set it up once in 5 minutes to capture high-intent buyers and get found everywhere. We
-              handle the rest. No SEO agency. Just more profitable customers.
+            <p className="mx-auto mt-5 max-w-[560px] text-[15px] leading-7 text-muted-foreground">
+              Set it up once in 5 minutes to capture high-intent buyers and get found everywhere.
+              No $3,000/mo agency retainer. No manual blog writing. Just automated customers.
             </p>
-            <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <Button size="lg" className="glow-button h-12 rounded-full px-7 font-medium" asChild>
-                <Link to="/dashboard">
-                  Get started <ArrowRight className="ml-1.5 size-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 rounded-full bg-background/80 px-6 font-medium shadow-sm hover:bg-background"
-                asChild
+
+            {/* Interactive Domain Audit Bar (Lead Magnet Hook) */}
+            <div className="mx-auto mt-8 max-w-xl">
+              <form
+                onSubmit={handleHeroSubmit}
+                className="flex flex-col sm:flex-row items-center gap-2 rounded-2xl sm:rounded-full border border-primary/30 bg-card/95 p-2 shadow-2xl shadow-primary/10 backdrop-blur-md"
               >
-                <Link to="/dashboard">
-                  <Play className="mr-2 size-3.5 fill-current" /> View live demo
-                </Link>
-              </Button>
+                <div className="flex flex-1 items-center gap-2 px-4 py-2 w-full">
+                  <span className="text-sm text-muted-foreground select-none">https://</span>
+                  <input
+                    type="text"
+                    value={domain}
+                    onChange={(e) => setDomain(e.target.value)}
+                    placeholder="yoursite.com"
+                    className="flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-muted-foreground/50"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="glow-button h-12 w-full sm:w-auto rounded-xl sm:rounded-full px-7 text-sm font-bold shrink-0"
+                >
+                  Get Free Audit <ArrowRight className="ml-1.5 size-4" />
+                </Button>
+              </form>
+              <p className="mt-3 text-xs text-muted-foreground">
+                ⚡ Instant 60-second scan • Checks Perplexity, SearchGPT & Google AI • 100% Free
+              </p>
             </div>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
+
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="text-amber-500">⭐</span> 4.9/5 from 1,156+ verified businesses
               </span>
@@ -116,35 +141,28 @@ function Index() {
           <HeroSearch />
         </div>
       </section>
-      <section className="border-b border-border bg-background px-6 pb-12 pt-8">
-        <p className="mb-7 text-center text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          CONTINUOUSLY INDEXED & PROMOTED ACROSS:
+      {/* High-Authority Logo Cloud */}
+      <section className="border-b border-border/80 bg-muted/20 px-6 py-10">
+        <p className="mb-6 text-center text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+          CITED & CONTINUOUSLY INDEXED ACROSS LEADING AI ENGINES & PLATFORMS
         </p>
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-6 text-foreground/75 sm:gap-x-12">
-          {[
-            "WordPress",
-            "Shopify",
-            "Webflow",
-            "Ghost",
-            "Wix",
-            "Squarespace",
-            "ChatGPT",
-            "Perplexity",
-            "Gemini",
-            "Google",
-          ].map((n) => (
-            <div
-              key={n}
-              className="integration-logo flex items-center transition-all duration-300 hover:text-foreground"
-            >
-              <PlatformLogo name={n} />
-            </div>
+        <TrustedLogos />
+
+        <div className="mx-auto mt-7 flex max-w-4xl flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border/40 pt-5 text-xs text-muted-foreground">
+          <span className="font-semibold text-foreground/70">1-Click Direct CMS Connect:</span>
+          {["WordPress", "Shopify", "Webflow", "Ghost", "Wix", "Squarespace"].map((n) => (
+            <span key={n} className="inline-flex items-center gap-1.5 font-medium hover:text-foreground transition-colors">
+              <PlatformLogo name={n} iconOnly className="size-3.5" />
+              {n}
+            </span>
           ))}
         </div>
       </section>
+
       <MapsShowcase />
       <HowItWorks />
       <AISearch />
+      <InteractiveRoiCalculator />
       <Results />
       <Pricing />
       <FAQ />

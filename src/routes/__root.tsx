@@ -79,20 +79,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "GeoRanked — Autonomous SEO & AI Search" },
+      { title: "GeoRanked — Autonomous SEO & Generative Engine Optimization (GEO)" },
       {
         name: "description",
-        content: "Grow your visibility in Google and AI search with autonomous content.",
+        content: "Win the AI search era. Autonomous Generative Engine Optimization (GEO) and programmatic SEO to get cited by Perplexity, ChatGPT Search, and Google.",
       },
-      { property: "og:title", content: "GeoRanked — Autonomous SEO & AI Search" },
+      {
+        name: "keywords",
+        content: "generative engine optimization, GEO, AI search ranking, Perplexity SEO, ChatGPT search visibility, programmatic SEO, autonomous content engine",
+      },
+      { property: "og:title", content: "GeoRanked — Autonomous SEO & Generative Engine Optimization (GEO)" },
       {
         property: "og:description",
-        content: "Grow your visibility in Google and AI search with autonomous content.",
+        content: "Win the AI search era. Get cited by Perplexity, ChatGPT Search, and Google with autonomous content clusters.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://georanked.vercel.app" },
+      { property: "og:site_name", content: "GeoRanked" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "GeoRanked — Autonomous SEO & GEO Engine" },
+      { name: "twitter:description", content: "Automate citation dominance on Perplexity, ChatGPT Search & Google." },
     ],
     links: [
+      { rel: "canonical", href: "https://georanked.vercel.app" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700;750;800&display=swap",
@@ -111,10 +120,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "GeoRanked",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://georanked.vercel.app",
+    "description": "Autonomous Generative Engine Optimization (GEO) and SEO platform that optimizes websites for Perplexity, ChatGPT Search, and Google citations.",
+    "offers": {
+      "@type": "Offer",
+      "price": "49.00",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Perplexity Citation Tracking",
+      "ChatGPT Search Engine Optimization",
+      "Autonomous Topical Authority Clustering",
+      "Programmatic Content Generation"
+    ]
+  };
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        />
       </head>
       <body>
         {children}

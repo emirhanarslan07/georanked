@@ -114,116 +114,368 @@ function ComparisonControls({ sim }: { sim: ReturnType<typeof useRanking> }) {
 }
 export function HeroSearch() {
   const sim = useRanking();
-  const [engine, setEngine] = useState("Google");
-  const [query, setQuery] = useState("best tools for growing my business");
+  const [engine, setEngine] = useState("Perplexity");
+  const [query, setQuery] = useState("best AI CRM for B2B startups");
   const [submitted, setSubmitted] = useState(query);
+  const [activeCitation, setActiveCitation] = useState<number | null>(null);
+
+  const presets = [
+    "best AI CRM for B2B startups",
+    "top autonomous SEO software",
+    "fastest cloud accounting for SaaS",
+    "best organic growth tools 2026",
+  ];
+
+  const handlePresetClick = (p: string) => {
+    setQuery(p);
+    setSubmitted(p);
+    sim.replay();
+  };
+
   return (
-    <div ref={sim.ref} className="relative mx-auto mt-8 max-w-[690px]">
-      <div className="mb-4 flex justify-center gap-2">
-        {["Google", "Perplexity"].map((e) => (
+    <div ref={sim.ref} className="relative mx-auto mt-8 max-w-[720px]">
+      {/* Engine Switcher */}
+      <div className="mb-4 flex flex-wrap justify-center gap-2">
+        {[
+          { id: "Perplexity", label: "Perplexity AI" },
+          { id: "ChatGPT", label: "SearchGPT / OpenAI" },
+          { id: "Google", label: "Google AI Overview" },
+        ].map((e) => (
           <Button
-            key={e}
-            variant={engine === e ? "secondary" : "ghost"}
+            key={e.id}
+            variant={engine === e.id ? "secondary" : "ghost"}
             size="sm"
-            className="rounded-full border border-transparent px-4 text-xs"
-            onClick={() => setEngine(e)}
-            aria-pressed={engine === e}
+            className={`rounded-full border px-4 text-xs transition-all ${
+              engine === e.id
+                ? "border-primary/40 bg-accent text-primary font-bold shadow-sm"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => {
+              setEngine(e.id);
+              sim.replay();
+            }}
+            aria-pressed={engine === e.id}
           >
-            <PlatformLogo name={e} iconOnly />
-            {e === "Google" ? "Google Search" : "Perplexity AI"}
+            <PlatformLogo name={e.id} iconOnly className="size-4" />
+            {e.label}
           </Button>
         ))}
       </div>
-      <div className="search-demo overflow-hidden rounded-lg border border-border bg-background text-left">
-        <div className="flex items-center justify-between border-b border-border bg-muted/50 px-5 py-3">
-          <span className="flex items-center gap-2 text-[10px] font-medium text-muted-foreground">
-            <span className="live-dot size-1.5 rounded-full bg-success" />
-            YOUR NEXT CUSTOMER'S SEARCH
+
+      <div className="search-demo overflow-hidden rounded-2xl border border-border bg-card/95 text-left shadow-2xl backdrop-blur-md">
+        <div className="flex items-center justify-between border-b border-border bg-muted/40 px-5 py-3">
+          <span className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground">
+            <span className="live-dot size-2 rounded-full bg-success animate-pulse" />
+            LIVE AI CITATION SIMULATION
           </span>
-          <span className="text-[9px] text-muted-foreground">Live simulation</span>
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+            Interactive Sandbox
+          </span>
         </div>
-        <div className="p-4 sm:p-5">
+
+        <div className="p-5 sm:p-6">
+          {/* Search Query Input */}
           <form
-            className="flex h-11 items-center gap-3 rounded-full border border-border bg-muted/60 px-4"
+            className="flex h-12 items-center gap-3 rounded-full border border-border bg-muted/60 px-4 transition-all focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/10"
             onSubmit={(e) => {
               e.preventDefault();
-              setSubmitted(query.trim() || "best tools for growing my business");
+              setSubmitted(query.trim() || presets[0]);
               sim.replay();
             }}
           >
-            <PlatformLogo name={engine} iconOnly />
+            <PlatformLogo name={engine} iconOnly className="size-5 shrink-0" />
             <input
               aria-label="Search preview query"
-              className="min-w-0 flex-1 bg-transparent text-xs outline-none sm:text-sm"
+              className="min-w-0 flex-1 bg-transparent text-xs sm:text-sm font-medium outline-none placeholder:text-muted-foreground/60"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              placeholder="Ask an AI search question..."
             />
-            <Button type="submit" size="icon" variant="ghost" aria-label="Search">
-              <Search />
+            <Button type="submit" size="sm" variant="ghost" className="h-8 rounded-full px-3 text-xs font-semibold text-primary hover:bg-primary/10">
+              <Search className="mr-1.5 size-3.5" /> Simulate
             </Button>
           </form>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">
-              {engine === "Google" ? "Organic search results" : "AI answer sources"}
+
+          {/* Quick Clickable Presets */}
+          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] uppercase font-bold text-muted-foreground/70 mr-1">Try prompts:</span>
+            {presets.map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => handlePresetClick(p)}
+                className={`rounded-full border px-2.5 py-1 text-[10px] font-medium transition-all ${
+                  query === p
+                    ? "border-primary bg-primary/15 text-primary font-semibold"
+                    : "border-border/80 bg-background/80 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+
+          {/* Simulation Status Badge */}
+          <div className="mt-5 flex items-center justify-between border-t border-border/60 pt-4">
+            <span className="text-xs font-semibold text-foreground/80">
+              {engine === "Google" ? "AI Overviews & Organic Consensus" : "LLM Semantic Citation Synthesis"}
             </span>
             <span
-              className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${sim.rank <= 3 ? "bg-success-soft text-success" : "bg-muted text-muted-foreground"}`}
+              className={`rounded-full px-3 py-1 text-[11px] font-bold ${
+                sim.rank <= 3
+                  ? "bg-success-soft text-success border border-success/30"
+                  : "bg-destructive/10 text-destructive border border-destructive/20"
+              }`}
             >
-              {engine === "Google"
-                ? `#${sim.rank} on Google`
-                : sim.rank <= 3
-                  ? "Cited in AI answer"
-                  : "Not cited yet"}
+              {sim.rank <= 3
+                ? "✦ #1 Cited Source by LLM"
+                : "× Competitors Cited (Brand Omitted)"}
             </span>
           </div>
+
+          {/* Interactive AI Output Box */}
           <div
-            className={`my-3 rounded-lg border p-4 transition-all duration-500 ${sim.rank <= 3 ? "border-primary/40 bg-accent/25 ring-4 ring-primary/5" : "border-border bg-muted/20"}`}
+            className={`my-3.5 rounded-xl border p-4 sm:p-5 transition-all duration-500 ${
+              sim.rank <= 3
+                ? "border-primary/40 bg-accent/20 ring-4 ring-primary/5 shadow-md"
+                : "border-destructive/20 bg-destructive/5"
+            }`}
           >
-            <div className="flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-md bg-accent text-primary">
+            <div className="flex items-center gap-2.5">
+              <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Globe className="size-4" />
               </span>
               <div className="text-xs">
-                <strong>Your Brand</strong>
+                <strong className="text-foreground">Your Brand</strong>
                 <p className="mt-0.5 text-[10px] text-muted-foreground">
-                  georanked.online › insights › growth
+                  georanked.vercel.app › solutions › {submitted.split(" ")[0]?.toLowerCase() || "ai"}
                 </p>
               </div>
-              <span className="ml-auto rounded bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
-                YOU
+              <span className="ml-auto rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-extrabold text-primary-foreground shadow-sm">
+                TARGET BRAND
               </span>
             </div>
-            <h3 className="mt-3 text-[16px] font-semibold text-brand-blue">
-              Why Your Brand is a leading choice
-            </h3>
-            <p className="mt-1.5 text-xs leading-5 text-muted-foreground">
-              Businesses using this automated system experience 3x increase in organic leads within 90 days. Top-rated customer satisfaction.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded bg-success-soft px-2.5 py-1 text-[10px] font-medium text-success">
-                {sim.rank <= 3 ? "+2,400 monthly clicks" : "120 monthly clicks"}
+
+            {sim.rank <= 3 ? (
+              <div className="mt-3.5 text-xs sm:text-sm leading-relaxed text-foreground/90">
+                <p>
+                  Based on recent commercial benchmarks,{" "}
+                  <strong className="text-primary font-bold">Your Brand</strong>{" "}
+                  is the top recommendation for{" "}
+                  <span className="italic">"{submitted}"</span> due to its answer-first content structure and verified multi-source consensus.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px]">
+                  <span className="text-muted-foreground font-semibold">Citations cited by {engine}:</span>
+                  {[
+                    { id: 1, label: "[1] yourbrand.com/overview", trust: "98% Confidence", snippet: "Structured JSON-LD schema validated" },
+                    { id: 2, label: "[2] Industry Review 2026", trust: "High Authority", snippet: "G2 and Trustpilot high consensus" },
+                    { id: 3, label: "[3] Technical Teardown", trust: "Authoritative", snippet: "Answer-first H2/H3 entities indexed" },
+                  ].map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setActiveCitation(activeCitation === c.id ? null : c.id)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-all ${
+                        activeCitation === c.id
+                          ? "border-primary bg-primary text-primary-foreground shadow"
+                          : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/20"
+                      }`}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+
+                {activeCitation && (
+                  <div className="mt-2.5 rounded-lg border border-primary/30 bg-background/95 p-3 text-xs text-muted-foreground shadow-sm">
+                    <p className="font-semibold text-foreground">
+                      Citation #{activeCitation} Inspection:
+                    </p>
+                    <p className="mt-1 text-[11px]">
+                      LLMs synthesize this URL into the primary answer block because GeoRanked automatically structured your site's content with entity Q&A markup.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                <p className="text-destructive font-medium">
+                  When potential buyers search this query, AI models currently synthesize answers from 3 of your competitors.
+                </p>
+                <p className="mt-1.5 text-[11px]">
+                  Your website lacks answer-first semantic clusters and schema entities, leaving you invisible in AI search results.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-border/50">
+              <span className={`rounded-md px-2.5 py-1 text-[10px] font-semibold ${
+                sim.rank <= 3 ? "bg-success-soft text-success" : "bg-muted text-muted-foreground"
+              }`}>
+                {sim.rank <= 3 ? "+3,100 monthly AI clicks" : "0 monthly AI citations"}
               </span>
-              <span className="rounded bg-accent px-2.5 py-1 text-[10px] font-medium text-primary">
-                {sim.rank <= 3
-                  ? engine === "Google"
-                    ? "Featured snippet"
-                    : "Perplexity citation"
-                  : "Waiting to be discovered"}
+              <span className="rounded-md bg-accent px-2.5 py-1 text-[10px] font-semibold text-primary">
+                {sim.rank <= 3 ? "Featured LLM Snippet" : "Lost to competitors"}
               </span>
-              {sim.rank <= 3 && (
-                <span className="rounded bg-muted px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
-                  + 3 more winning stories
-                </span>
-              )}
+              <span className="rounded-md bg-muted px-2.5 py-1 text-[10px] font-medium text-muted-foreground">
+                {sim.rank <= 3 ? "94% Search Consensus" : "Citation Gap Detected"}
+              </span>
             </div>
           </div>
+
           <ComparisonControls sim={sim} />
         </div>
       </div>
       <p className="mt-3 text-center text-[10px] text-muted-foreground">
-        Illustrative results. Real ambition. No rankings or citations guaranteed.
+        Interactive real-time simulation • Test custom keywords or click presets to see AI citation shifts.
       </p>
     </div>
+  );
+}
+
+export function InteractiveRoiCalculator() {
+  const [volume, setVolume] = useState(8500);
+  const [dealValue, setDealValue] = useState(120);
+  const [convRate, setConvRate] = useState(2.5);
+
+  // 40% of searchers now check AI engines first; without GEO, this is 100% lost
+  const lostRevenue = Math.round(volume * 0.40 * (convRate / 100) * dealValue);
+  // With GeoRanked, capture ~28% of those commercial queries into direct pipeline
+  const capturedPipeline = Math.round(volume * 0.28 * (convRate / 100) * dealValue);
+  const roiMultiplier = Math.max(1, Math.round(capturedPipeline / 79));
+
+  return (
+    <section className="border-y border-border/80 bg-gradient-to-b from-card/80 to-background px-6 py-20">
+      <div className="mx-auto max-w-4xl">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-accent/60 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
+            <Sparkles className="size-3.5" /> INTERACTIVE REVENUE & LOSS CALCULATOR
+          </div>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            How much revenue are you losing to AI search?
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+            Adjust the sliders below to calculate your brand's estimated citation gap and the compounding pipeline GeoRanked can capture.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-8 rounded-2xl border border-border bg-card p-6 shadow-xl sm:p-8 lg:grid-cols-2">
+          {/* Sliders Controls */}
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-foreground">Monthly Niche Search Volume</span>
+                <span className="rounded-md bg-accent px-2 py-0.5 font-bold text-primary">
+                  {volume.toLocaleString()} searches
+                </span>
+              </div>
+              <input
+                type="range"
+                min={1000}
+                max={50000}
+                step={500}
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="mt-2.5 h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
+              />
+              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                <span>1,000 / mo</span>
+                <span>25,000 / mo</span>
+                <span>50,000 / mo</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-foreground">Average Customer / Deal Value</span>
+                <span className="rounded-md bg-accent px-2 py-0.5 font-bold text-primary">
+                  ${dealValue.toLocaleString()}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={20}
+                max={1500}
+                step={10}
+                value={dealValue}
+                onChange={(e) => setDealValue(Number(e.target.value))}
+                className="mt-2.5 h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
+              />
+              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                <span>$20</span>
+                <span>$750</span>
+                <span>$1,500+</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-foreground">Website Conversion Rate</span>
+                <span className="rounded-md bg-accent px-2 py-0.5 font-bold text-primary">
+                  {convRate.toFixed(1)}%
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0.5}
+                max={6}
+                step={0.1}
+                value={convRate}
+                onChange={(e) => setConvRate(Number(e.target.value))}
+                className="mt-2.5 h-2 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary"
+              />
+              <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+                <span>0.5%</span>
+                <span>3.0%</span>
+                <span>6.0%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Dynamic Calculation Cards */}
+          <div className="flex flex-col justify-between rounded-xl border border-primary/20 bg-accent/20 p-6">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Estimated Monthly Pipeline Loss
+                </span>
+                <span className="rounded bg-destructive/15 px-2 py-0.5 text-[10px] font-bold text-destructive">
+                  LOST TO COMPETITORS
+                </span>
+              </div>
+              <div className="mt-2 text-3xl font-black text-destructive sm:text-4xl">
+                -${lostRevenue.toLocaleString()}
+                <span className="text-xs font-normal text-muted-foreground"> / month</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Because AI engines cite competitor domains on 40% of these commercial questions instead of your website.
+              </p>
+
+              <div className="my-5 border-t border-border/80" />
+
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Potential Pipeline with GeoRanked
+                </span>
+                <span className="rounded bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">
+                  {roiMultiplier}× ROI on $79 Plan
+                </span>
+              </div>
+              <div className="mt-2 text-3xl font-black text-success sm:text-4xl">
+                +${capturedPipeline.toLocaleString()}
+                <span className="text-xs font-normal text-muted-foreground"> / month</span>
+              </div>
+            </div>
+
+            <Button asChild size="lg" className="glow-button mt-6 h-12 w-full rounded-xl text-sm font-bold">
+              <Link to="/free-audit">
+                Run Free Audit for My Domain <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 const industries = {

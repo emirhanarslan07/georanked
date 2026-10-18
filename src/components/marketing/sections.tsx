@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -15,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AIComparison } from "@/components/marketing/search-experience";
 import { TrafficChart } from "@/components/traffic-chart";
+import { EarlyAccessModal } from "@/components/EarlyAccessModal";
 export function SectionHeading({
   label,
   title,
@@ -123,8 +125,10 @@ export function Results() {
   );
 }
 export function Pricing() {
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20">
+    <section id="pricing" className="mx-auto max-w-6xl px-6 py-20 scroll-mt-24">
       <SectionHeading
         label="Simple pricing. Serious growth."
         title="An unfair advantage. A fair price."
@@ -186,12 +190,16 @@ export function Pricing() {
             </div>
             <Button
               variant={i === 1 ? "default" : "outline"}
-              className={i === 1 ? "glow-button" : ""}
+              className={i === 1 ? "glow-button font-bold" : "font-semibold"}
               asChild
             >
-              <Link to="/dashboard">
-                Get started <ArrowRight />
-              </Link>
+              <a
+                href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Get started <ArrowRight className="ml-1 size-4" />
+              </a>
             </Button>
             <ul className="mt-7 space-y-4">
               {p.features.map((f) => (
@@ -215,6 +223,13 @@ export function Pricing() {
           <Check className="size-4 text-success" /> Cancel anytime with 1 click
         </span>
       </div>
+
+      {selectedPlan && (
+        <EarlyAccessModal
+          planName={selectedPlan}
+          onClose={() => setSelectedPlan(null)}
+        />
+      )}
     </section>
   );
 }
