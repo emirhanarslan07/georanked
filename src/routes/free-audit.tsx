@@ -387,24 +387,33 @@ function FreeAuditPage() {
               {/* Conversion Call-to-Action Card */}
               <div className="rounded-2xl border-2 border-primary/40 bg-card p-7 shadow-2xl text-center sm:p-10">
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
-                  <Zap className="size-4" /> AUTONOMOUS GEO ENGINE
+                  <Zap className="size-4" /> 24-HOUR ACTIONABLE DELIVERABLE
                 </div>
                 <h3 className="mt-4 text-2xl font-bold sm:text-3xl">
-                  Close this citation gap in 48 hours.
+                  Get Your 15-Page AI Visibility & Citation Blueprint
                 </h3>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  GeoRanked autonomously writes, structures, and publishes 30 citation-targeted
-                  content clusters directly to your site every month. No expensive agency retainers.
-                  Start your <strong>3-day free trial</strong> with 3 free articles.
+                  A complete forensic breakdown of what ChatGPT, Perplexity, and Gemini say about your business and your city. Includes your competitors' exact citation sources, missing entity schemas, and ready-to-copy Schema markup.
                 </p>
 
-                <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <div className="my-6">
+                  <span className="text-4xl font-extrabold text-foreground">$49</span>
+                  <span className="ml-2 text-sm text-muted-foreground font-medium">/ one-time payment (No subscription)</span>
+                </div>
+
+                <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button
                     size="lg"
                     className="glow-button h-13 rounded-full px-8 text-sm font-bold w-full sm:w-auto"
-                    onClick={() => setShowTrialModal(true)}
+                    asChild
                   >
-                    Start 3-Day Free Trial (3 Free Articles) <ArrowRight className="ml-2 size-4" />
+                    <a
+                      href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Order Full 15-Page Report ($49) <ArrowRight className="ml-2 size-4" />
+                    </a>
                   </Button>
                   <Button
                     size="lg"
@@ -413,6 +422,21 @@ function FreeAuditPage() {
                     asChild
                   >
                     <Link to={`/dashboard?domain=${encodeURIComponent(domainInput || 'yourbrand.com')}`}>
+                      Explore Interactive Dashboard →
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <ShieldCheck className="size-4 text-success" /> Delivered in 24 hours
+                  </span>
+                  <span>•</span>
+                  <span>One-time payment — zero recurring fees</span>
+                  <span>•</span>
+                  <span>Human-verified AI citation analysis</span>
+                </div>
+              </div>
                       Explore Interactive Dashboard ↗
                     </Link>
                   </Button>

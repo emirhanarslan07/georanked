@@ -136,6 +136,36 @@ export function Pricing() {
         title="An unfair advantage. A fair price."
         description="No agency fees. No long-term contracts. Just consistent growth."
       />
+
+      {/* Featured 24-Hour One-Time Audit Banner */}
+      <div className="mb-10 rounded-2xl border-2 border-primary/50 bg-gradient-to-r from-primary/10 via-background to-primary/5 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="text-left space-y-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary">
+            ⚡ 24-Hour Deliverable — No Subscription
+          </span>
+          <h3 className="text-xl sm:text-2xl font-bold">
+            15-Page AI Visibility & Competitor Citation Blueprint
+          </h3>
+          <p className="text-sm text-muted-foreground max-w-2xl">
+            A forensic analysis of how ChatGPT, Perplexity, and Google Gemini rank your business vs. competitors in your niche and city. Includes missing entity schemas and ready-to-copy code.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
+          <div className="text-center sm:text-right">
+            <div className="text-3xl font-extrabold text-foreground">$49</div>
+            <div className="text-[11px] text-muted-foreground font-medium">One-Time Payment</div>
+          </div>
+          <Button size="lg" className="glow-button font-bold rounded-xl px-7" asChild>
+            <a
+              href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Order Audit ($49) →
+            </a>
+          </Button>
+        </div>
+      </div>
       <div className="grid items-stretch gap-5 md:grid-cols-3">
         {[
           {
