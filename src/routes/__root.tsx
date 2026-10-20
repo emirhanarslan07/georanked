@@ -164,13 +164,31 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { ClerkProvider } from "@clerk/react";
+
+const CLERK_PUBLISHABLE_KEY =
+  (typeof process !== "undefined" && process.env?.VITE_CLERK_PUBLISHABLE_KEY?.trim()) ||
+  (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()) ||
+  import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY ||
+  "pk_test_YmFsYW5jZWQtY2hvdy05OTE4LmNsZXJrLmFjY291bnRzLmRldiQ";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  return (
+  const content = (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
+
+  if (CLERK_PUBLISHABLE_KEY) {
+    return (
+      <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+        {content}
+      </ClerkProvider>
+    );
+  }
+
+  return content;
 }

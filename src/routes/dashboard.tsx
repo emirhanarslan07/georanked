@@ -417,24 +417,24 @@ function Dashboard() {
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/10 p-4 text-foreground shadow-sm">
               <div className="flex items-start sm:items-center gap-3">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-xs shadow">
-                  3D
+                  <Sparkles className="size-4" />
                 </span>
                 <div>
                   <h3 className="font-bold text-xs sm:text-sm">
-                    3-Day Free Trial Active for <span className="text-primary underline">{userDomain}</span>
+                    Free AI Visibility Article Ready for <span className="text-primary underline">{userDomain}</span>
                   </h3>
                   <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
-                    You have <strong className="text-foreground">{freeArticlesLeft} free trial articles</strong> remaining. Generate your first high-authority article now to see how GeoRanked captures citations.
+                    Generate your 1 free sample high-authority article now. Upgrade to the complete 15-page teardown blueprint for $49.
                   </p>
                 </div>
               </div>
               <Button size="sm" className="glow-button shrink-0 text-xs font-bold" asChild>
                 <a
-                  href="https://buy.polar.sh/polar_cl_BGMsdGvTUw5GzdavDOWa2eRjZBPO58aqbTFrn3b4FH5"
-                  data-polar-checkout
-                  data-polar-checkout-theme="dark"
+                  href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Activate Autopilot ($79/mo) <ArrowRight className="ml-1 size-3.5" />
+                  Get 15-Page Blueprint ($49) <ArrowRight className="ml-1 size-3.5" />
                 </a>
               </Button>
             </div>
@@ -465,7 +465,7 @@ function Dashboard() {
             <>
               <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {[
-                  [Sparkles, "Trial quota remaining", `${freeArticlesLeft} / 3 free`, "Free pass active"],
+                  [Sparkles, "Free sample article", `${freeArticlesLeft} / 1 free`, "Ready to generate"],
                   [
                     FileText,
                     "Articles published",
@@ -537,10 +537,10 @@ function Dashboard() {
                     </div>
                     <h3 className="text-sm sm:text-base font-semibold">No articles generated yet</h3>
                     <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-                      Your 3-day free trial includes 3 autonomous GEO articles for <span className="text-foreground font-semibold">{userDomain}</span>. Generate your first one now.
+                      Generate your 1 free sample high-authority citation article for <span className="text-foreground font-semibold">{userDomain}</span>.
                     </p>
                     <Button onClick={openGenerator} className="glow-button mt-4 text-xs font-semibold">
-                      <Plus className="mr-1.5 size-4" /> Generate First Article (Free Trial)
+                      <Plus className="mr-1.5 size-4" /> Generate Sample Article (Free)
                     </Button>
                   </div>
                 ) : (
@@ -637,10 +637,10 @@ function Dashboard() {
                               <Sparkles className="size-8 text-primary/60 mb-2" />
                               <p className="font-semibold text-sm text-foreground">No articles generated yet</p>
                               <p className="text-xs text-muted-foreground mt-0.5 max-w-sm">
-                                Your 3-day free trial includes 3 autonomous GEO articles for {userDomain}.
+                                Generate your 1 free sample high-authority citation article for {userDomain}.
                               </p>
                               <Button onClick={openGenerator} className="glow-button mt-4 text-xs font-semibold">
-                                <Plus className="mr-1.5 size-3.5" /> Generate First Article
+                                <Plus className="mr-1.5 size-3.5" /> Generate Sample Article (Free)
                               </Button>
                             </div>
                           </td>

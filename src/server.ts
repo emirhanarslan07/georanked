@@ -19,8 +19,6 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
-const recentNotifications: any[] = [];
-
 async function sendLeadAlertEmail(payload: any) {
   const eventType = payload.type || "Form Submission";
   const subject =
@@ -106,31 +104,44 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+import { insertLeadToSupabase } from "./lib/db";
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
 
-      if (url.pathname === "/api/notify-lead") {
-        if (request.method === "POST") {
-          const payload = await request.json();
-          recentNotifications.unshift({ ...payload, receivedAt: new Date().toISOString() });
-          if (recentNotifications.length > 100) recentNotifications.pop();
-          const isAutoDeepLink = String(payload?.keyword || "").includes("(email_deep_link)");
-          const result = isAutoDeepLink
-            ? { sent: false, channel: "logged_only" }
-            : await sendLeadAlertEmail(payload);
-          return new Response(JSON.stringify({ ok: true, ...result }), {
-            status: 200,
-            headers: { "content-type": "application/json" },
+      // Inbound Lead Ingestion Endpoint (Write-Only, No Public Read)
+      if (url.pathname === "/api/notify-lead" && request.method === "POST") {
+        const payload = await request.json();
+
+        // 1. Save directly & securely into private Supabase PostgreSQL database
+        try {
+          await insertLeadToSupabase({
+            email: payload.email,
+            domain: payload.domain || payload.website,
+            type: payload.type || "trial_signup",
+            plan: payload.plan || "Starter Autopilot ($79/mo)",
+            auth_provider: payload.authProvider || "email",
+            metadata: payload,
           });
+        } catch (err) {
+          console.error("Supabase lead error:", err);
         }
-        if (request.method === "GET") {
-          return new Response(JSON.stringify({ ok: true, leads: recentNotifications }), {
-            status: 200,
-            headers: { "content-type": "application/json" },
-          });
+
+        // 2. Send instant email notification to founder if not automated
+        const isAutoDeepLink = String(payload?.keyword || "").includes("(email_deep_link)");
+        if (!isAutoDeepLink) {
+          sendLeadAlertEmail(payload).catch(() => {});
         }
+
+        // Return minimal sanitized response - zero customer data exposed
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: {
+            "content-type": "application/json",
+          },
+        });
       }
 
       const handler = await getServerEntry();

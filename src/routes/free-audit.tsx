@@ -384,6 +384,74 @@ function FreeAuditPage() {
                 </div>
               </div>
 
+              {/* Free Sample Article Generated Specifically for Domain */}
+              <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-card to-background p-6 shadow-xl sm:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                      <Sparkles className="size-3.5" /> 1 FREE LIVE GEO ARTICLE GENERATED FOR YOUR DOMAIN
+                    </div>
+                    <h3 className="mt-2 text-xl font-bold sm:text-2xl">
+                      Why ChatGPT Doesn&apos;t Recommend {auditResult.domain} (And the Fix Article)
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Here is the exact high-authority citation cluster article missing from your website:
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="glow-button shrink-0 text-xs font-bold h-10 px-5"
+                    asChild
+                  >
+                    <a
+                      href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Deploy to Website ($49) <ArrowRight className="ml-1.5 size-3.5" />
+                    </a>
+                  </Button>
+                </div>
+
+                <div className="mt-6 rounded-xl border border-border bg-accent/20 p-5 text-left font-mono text-xs leading-relaxed space-y-4">
+                  <div className="border-b border-border/60 pb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">TARGET QUERY</span>
+                    <span className="text-foreground font-semibold font-sans text-sm">
+                      Best rated {auditResult.targetKeyword || 'services'} & 24/7 emergency response guide
+                    </span>
+                  </div>
+
+                  <div className="font-sans text-muted-foreground space-y-3 text-xs sm:text-sm">
+                    <p className="text-foreground font-semibold">
+                      Article Outline & Citations Engine:
+                    </p>
+                    <p>
+                      <strong>1. Executive Summary:</strong> How local service buyers in your region evaluate speed, licensed certifications, and response times. When searchers ask ChatGPT or Perplexity, the model prioritizes entities that provide direct pricing anchors and verified service boundaries.
+                    </p>
+                    <p>
+                      <strong>2. Entity Validation Checklist:</strong> Matches your NAP (Name, Address, Phone) consistency across major directories with structured <code className="text-primary bg-primary/10 px-1 py-0.5 rounded">schema.org/LocalBusiness</code> markup.
+                    </p>
+                    <p>
+                      <strong>3. Comparison Consensus:</strong> Directly positions {auditResult.domain} as the primary trusted provider over regional competitors for emergency dispatch.
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-background/80 border border-primary/20 p-4 text-center font-sans mt-4">
+                    <p className="text-xs text-muted-foreground">
+                      Want this complete, SEO & GEO-optimized 1,800-word article deployed to your site with Schema markup + your competitors&apos; citation sources?
+                    </p>
+                    <a
+                      href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
+                    >
+                      Get the Full 15-Page Blueprint & Ready-to-Publish Article for $49 One-Time &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               {/* Conversion Call-to-Action Card */}
               <div className="rounded-2xl border-2 border-primary/50 bg-card p-7 shadow-2xl text-center sm:p-10 relative overflow-hidden">
                 <div className="absolute top-0 right-0 left-0 bg-primary/10 py-1.5 px-4 border-b border-primary/20 text-[11px] font-bold text-primary flex items-center justify-center gap-2">

@@ -2,103 +2,99 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, ShieldCheck, Globe, Mail, Loader2, Check } from "lucide-react";
+import { useClerk, SignInButton } from "@clerk/react";
 
 interface TrialSignupModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultDomain?: string;
+  onSuccess?: (data: { email: string; domain: string }) => void;
 }
 
-export function TrialSignupModal({ isOpen, onClose, defaultDomain = "" }: TrialSignupModalProps) {
+export function TrialSignupModal({ isOpen, onClose, defaultDomain = "", onSuccess }: TrialSignupModalProps) {
   const [email, setEmail] = useState("");
   const [domain, setDomain] = useState(defaultDomain);
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [isGoogleMode, setIsGoogleMode] = useState(false);
 
   const cleanDomainStr = (raw: string) => {
     return raw.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
   };
 
-  const handleSignup = async (e?: React.FormEvent) => {
+  const handleSignup = async (e?: React.FormEvent, isGoogle = false) => {
     if (e) e.preventDefault();
-    if (!email.trim() || !domain.trim()) return;
+    if (!email.trim()) return;
 
-    const cleanedDomain = cleanDomainStr(domain);
+    // If domain is empty, infer from email or fallback
+    let cleanedDomain = cleanDomainStr(domain);
+    if (!cleanedDomain && email.includes("@")) {
+      const parts = email.split("@");
+      if (parts[1] && !["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"].includes(parts[1])) {
+        cleanedDomain = parts[1];
+      } else {
+        cleanedDomain = "yourdomain.com";
+      }
+    }
+
     setLoading(true);
 
     try {
-      // 1. Post lead to internal notify-lead endpoint
       await fetch("/api/notify-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "trial_signup",
+          type: isGoogle ? "google_oauth_signup" : "trial_signup",
           email: email.trim(),
           domain: cleanedDomain,
           website: `https://${cleanedDomain}`,
-          plan: "3-Day Free Trial ($79/mo tier)",
+          plan: "3-Day Free Trial ($79/mo Starter)",
+          authProvider: isGoogle ? "google" : "email",
           timestamp: new Date().toISOString(),
         }),
       });
     } catch (err) {
-      // Ignore network errors to guarantee user entry
+      // Continue even if network issue
     }
 
-    // 2. Save session to localStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "georanked_session",
-        JSON.stringify({
-          email: email.trim(),
-          domain: cleanedDomain,
-          freeArticlesLeft: 3,
-          trialActive: true,
-          expiresAt: Date.now() + 3 * 24 * 60 * 60 * 1000,
-        })
-      );
-      // 3. Forward directly to dashboard
-      window.location.href = `/dashboard?domain=${encodeURIComponent(cleanedDomain)}&email=${encodeURIComponent(email.trim())}&trial=active`;
+      const sessionData = {
+        email: email.trim(),
+        domain: cleanedDomain,
+        freeArticlesLeft: 3,
+        trialActive: true,
+        authProvider: isGoogle ? "google" : "email",
+        expiresAt: Date.now() + 3 * 24 * 60 * 60 * 1000,
+      };
+      localStorage.setItem("georanked_session", JSON.stringify(sessionData));
+
+      if (onSuccess) {
+        onSuccess({ email: email.trim(), domain: cleanedDomain });
+      } else {
+        window.location.href = `/dashboard?domain=${encodeURIComponent(cleanedDomain)}&email=${encodeURIComponent(email.trim())}&trial=active`;
+      }
     }
   };
 
-  const handleGoogleAuth = () => {
-    setGoogleLoading(true);
-    // Instant Google OAuth simulation with user prompt or fallback
-    const promptEmail = prompt("Enter your Google Account email to continue:", email || "founder@startup.com");
-    if (promptEmail && promptEmail.includes("@")) {
-      const derivedDomain = domain.trim() || promptEmail.split("@")[1];
-      const cleaned = cleanDomainStr(derivedDomain);
-      setEmail(promptEmail);
-      setDomain(cleaned);
+  let clerk: any = null;
+  try {
+    clerk = useClerk();
+  } catch (e) {}
 
-      fetch("/api/notify-lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "google_oauth_signup",
-          email: promptEmail,
-          domain: cleaned,
-          website: `https://${cleaned}`,
-          plan: "3-Day Free Trial (Google OAuth)",
-          timestamp: new Date().toISOString(),
-        }),
-      }).finally(() => {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(
-            "georanked_session",
-            JSON.stringify({
-              email: promptEmail,
-              domain: cleaned,
-              freeArticlesLeft: 3,
-              trialActive: true,
-              expiresAt: Date.now() + 3 * 24 * 60 * 60 * 1000,
-            })
-          );
-          window.location.href = `/dashboard?domain=${encodeURIComponent(cleaned)}&email=${encodeURIComponent(promptEmail)}&trial=active`;
-        }
-      });
-    } else {
-      setGoogleLoading(false);
+  const handleGoogleClick = () => {
+    if (clerk && clerk.loaded !== false) {
+      try {
+        const cleaned = cleanDomainStr(domain);
+        clerk.openSignIn({
+          forceRedirectUrl: `/dashboard?domain=${encodeURIComponent(cleaned || "yourbrand.com")}&trial=active`,
+        });
+        return;
+      } catch (e) {}
+    }
+
+    setIsGoogleMode(true);
+    const emailEl = document.getElementById("trial-email-input");
+    if (emailEl) {
+      emailEl.focus();
     }
   };
 
@@ -110,26 +106,23 @@ export function TrialSignupModal({ isOpen, onClose, defaultDomain = "" }: TrialS
             <Sparkles className="size-6" />
           </div>
           <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">
-            Start your 3-day free trial
+            Generate 1 Free Sample GEO Article
           </DialogTitle>
           <DialogDescription className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Generate 3 autonomous GEO articles for your website. No credit card required.
+            See the exact high-authority article format designed to get your brand cited by ChatGPT. No credit card required.
           </DialogDescription>
         </DialogHeader>
 
-        {/* 1-Click Google Sign In */}
+        {/* Google / Work Sign In Options */}
         <div className="mt-5 space-y-3">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGoogleAuth}
-            disabled={googleLoading || loading}
-            className="w-full h-11 border-border/80 hover:bg-accent font-medium text-xs sm:text-sm gap-2.5 rounded-xl shadow-sm"
-          >
-            {googleLoading ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <svg className="size-4" viewBox="0 0 24 24">
+          <SignInButton mode="modal" forceRedirectUrl={`/dashboard?domain=${encodeURIComponent(cleanDomainStr(domain) || "yourbrand.com")}&trial=active`}>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={loading}
+              className="w-full h-11 border-border/80 hover:bg-accent font-medium text-xs sm:text-sm gap-2.5 rounded-xl shadow-sm transition-all"
+            >
+              <svg className="size-4 shrink-0" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -147,9 +140,9 @@ export function TrialSignupModal({ isOpen, onClose, defaultDomain = "" }: TrialS
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-            )}
-            Continue with Google
-          </Button>
+              Continue with Google
+            </Button>
+          </SignInButton>
 
           <div className="relative my-4 flex items-center justify-center">
             <span className="w-full border-t border-border" />
@@ -178,12 +171,20 @@ export function TrialSignupModal({ isOpen, onClose, defaultDomain = "" }: TrialS
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-foreground/80 mb-1.5 block">
-                Work Email
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-foreground/80 block">
+                  Work or Google Email
+                </label>
+                {isGoogleMode && (
+                  <span className="text-[11px] font-medium text-primary animate-pulse">
+                    Google email selected
+                  </span>
+                )}
+              </div>
               <div className="flex items-center rounded-xl border border-input bg-card px-3 py-2.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary shadow-sm">
                 <Mail className="mr-2 size-4 text-muted-foreground" />
                 <input
+                  id="trial-email-input"
                   type="email"
                   placeholder="you@yourcompany.com"
                   value={email}
@@ -205,7 +206,7 @@ export function TrialSignupModal({ isOpen, onClose, defaultDomain = "" }: TrialS
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  Start 3-Day Free Trial <ArrowRight className="size-4" />
+                  Generate Free Sample Article <ArrowRight className="size-4" />
                 </span>
               )}
             </Button>
