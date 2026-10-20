@@ -45,9 +45,15 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             </Button>
             <Button
               className="glow-button rounded-full px-3 text-xs font-bold sm:px-5"
-              onClick={() => setShowTrialModal(true)}
+              asChild
             >
-              Start Free Trial <ArrowUpRight className="ml-1 size-3.5" />
+              <a
+                href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Order Audit ($49) <ArrowUpRight className="ml-1 size-3.5" />
+              </a>
             </Button>
             <Button
               className="md:hidden"

@@ -126,140 +126,130 @@ export function Results() {
   );
 }
 export function Pricing() {
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [showTrialModal, setShowTrialModal] = useState(false);
-
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-6 py-20 scroll-mt-24">
       <SectionHeading
-        label="Simple pricing. Serious growth."
-        title="An unfair advantage. A fair price."
-        description="No agency fees. No long-term contracts. Just consistent growth."
+        label="Transparent, One-Time Deliverables"
+        title="Actionable AI Search Audits. No Monthly Subscriptions."
+        description="Get cited in ChatGPT, Perplexity, and Google AI Overviews. Pay once, receive your customized report in 24 hours."
       />
 
-      {/* Featured 24-Hour One-Time Audit Banner */}
-      <div className="mb-10 rounded-2xl border-2 border-primary/50 bg-gradient-to-r from-primary/10 via-background to-primary/5 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-        <div className="text-left space-y-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary">
-            ⚡ 24-Hour Deliverable — No Subscription
-          </span>
-          <h3 className="text-xl sm:text-2xl font-bold">
-            15-Page AI Visibility & Competitor Citation Blueprint
-          </h3>
-          <p className="text-sm text-muted-foreground max-w-2xl">
-            A forensic analysis of how ChatGPT, Perplexity, and Google Gemini rank your business vs. competitors in your niche and city. Includes missing entity schemas and ready-to-copy code.
+      <div className="grid items-stretch gap-6 md:grid-cols-3">
+        {/* Tier 1: Free */}
+        <div className="relative flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:border-primary/50">
+          <h3 className="text-lg font-bold">Free Instant Check</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Test your public domain across ChatGPT and Perplexity in 60 seconds.
           </p>
-        </div>
-        <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-          <div className="text-center sm:text-right">
-            <div className="text-3xl font-extrabold text-foreground">$49</div>
-            <div className="text-[11px] text-muted-foreground font-medium">One-Time Payment</div>
+          <div className="my-7">
+            <strong className="text-4xl font-extrabold">$0</strong>
+            <span className="text-sm text-muted-foreground font-medium"> / forever free</span>
           </div>
-          <Button size="lg" className="glow-button font-bold rounded-xl px-7" asChild>
+          <Button variant="outline" className="font-semibold rounded-xl h-12" asChild>
+            <a href="/free-audit">
+              Run Free Check <ArrowRight className="ml-1.5 size-4" />
+            </a>
+          </Button>
+          <ul className="mt-7 space-y-3.5 text-sm">
+            {[
+              "Instant 60-second AI citation scan",
+              "Competitor recommendation check",
+              "Basic Schema & Entity detection",
+              "Top 3 citation gaps identified",
+              "No credit card required"
+            ].map((f) => (
+              <li key={f} className="flex items-center gap-2.5 text-xs text-muted-foreground">
+                <Check className="size-4 text-success shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Tier 2: $49 One-Time (Featured) */}
+        <div className="relative flex flex-col rounded-2xl border-2 border-primary bg-card p-7 shadow-2xl shadow-primary/10 transition-transform hover:-translate-y-1">
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-4 py-1 text-[11px] font-bold text-primary-foreground tracking-wide uppercase">
+            ⭐ Most Popular — 24h Delivery
+          </span>
+          <h3 className="text-lg font-bold">15-Page AI Visibility Blueprint</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Full forensic breakdown of your city & niche across all major AI search engines.
+          </p>
+          <div className="my-7">
+            <strong className="text-4xl font-extrabold text-foreground">$49</strong>
+            <span className="text-sm text-muted-foreground font-medium"> / one-time payment</span>
+          </div>
+          <Button className="glow-button font-bold rounded-xl h-12 shadow-lg" asChild>
             <a
               href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Order Audit ($49) →
+              Order 24h Audit ($49) <ArrowRight className="ml-1.5 size-4" />
             </a>
           </Button>
+          <ul className="mt-7 space-y-3.5 text-sm">
+            {[
+              "15-page customized PDF & Markdown report",
+              "ChatGPT, Perplexity & Gemini audit for your city",
+              "Competitor citation sources & review platforms",
+              "Ready-to-paste LocalBusiness Schema JSON-LD code",
+              "Human-reviewed by our GEO search engineers",
+              "Delivered to your inbox in 24 hours",
+              "Zero monthly subscription or recurring fees"
+            ].map((f) => (
+              <li key={f} className="flex items-center gap-2.5 text-xs text-foreground font-medium">
+                <Check className="size-4 text-success shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Tier 3: $149 One-Time */}
+        <div className="relative flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:border-primary/50">
+          <h3 className="text-lg font-bold">Audit + Schema Implementation</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We handle the code and citation push for you. Complete hands-free setup.
+          </p>
+          <div className="my-7">
+            <strong className="text-4xl font-extrabold">$149</strong>
+            <span className="text-sm text-muted-foreground font-medium"> / one-time payment</span>
+          </div>
+          <Button variant="outline" className="font-semibold rounded-xl h-12" asChild>
+            <a
+              href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Get Hands-Free Setup <ArrowRight className="ml-1.5 size-4" />
+            </a>
+          </Button>
+          <ul className="mt-7 space-y-3.5 text-sm">
+            {[
+              "Everything in the 15-Page $49 Blueprint",
+              "Custom JSON-LD Schema engineered for your site",
+              "Direct injection instructions or CMS setup assistance",
+              "Entity submissions to top AI-crawled directories",
+              "7-day post-implementation re-verification check",
+              "Priority 12-hour report delivery"
+            ].map((f) => (
+              <li key={f} className="flex items-center gap-2.5 text-xs text-muted-foreground">
+                <Check className="size-4 text-success shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className="grid items-stretch gap-5 md:grid-cols-3">
-        {[
-          {
-            name: "Starter Autopilot",
-            price: 79,
-            desc: "Plant the seeds for compounding organic & AI growth.",
-            features: [
-              "30 articles per month",
-              "AI keyword & citation research",
-              "Automatic CMS publishing (WP, Webflow)",
-              "SEO-optimized images & schema",
-              "Perplexity & ChatGPT citations",
-              "1 website",
-            ],
-          },
-          {
-            name: "Growth GEO",
-            price: 129,
-            desc: "Own the conversation across ChatGPT, Perplexity & Google.",
-            features: [
-              "60 articles per month",
-              "Everything in Starter",
-              "Smart internal linking mesh",
-              "Priority content generation engine",
-              "Topical authority clustering",
-              "3 websites",
-            ],
-          },
-          {
-            name: "Scale Agency",
-            price: 249,
-            desc: "High volume portfolio reach on complete autopilot.",
-            features: [
-              "150 articles per month",
-              "Everything in Growth GEO",
-              "10 websites",
-              "Telegram 1-click publishing approval",
-              "Dedicated account manager & API",
-              "Agency-ready white-label workflows",
-            ],
-          },
-        ].map((p, i) => (
-          <div
-            key={p.name}
-            className={`relative flex flex-col rounded-lg border bg-card p-7 transition-transform hover:-translate-y-1 ${i === 0 ? "border-primary shadow-lg shadow-primary/10" : "border-border"}`}
-          >
-            {i === 0 && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-4 py-1 text-[11px] font-semibold text-primary-foreground">
-                ✦ Most popular
-              </span>
-            )}
-            <h3 className="text-lg font-bold">{p.name}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-            <div className="my-7">
-              <strong className="text-4xl">${p.price}</strong>
-              <span className="text-sm text-muted-foreground"> / month</span>
-            </div>
-            <Button
-              variant={i === 0 ? "default" : "outline"}
-              className={i === 0 ? "glow-button font-bold" : "font-semibold"}
-              onClick={() => setShowTrialModal(true)}
-            >
-              Start 3-Day Free Trial <ArrowRight className="ml-1 size-4" />
-            </Button>
-            <ul className="mt-7 space-y-4">
-              {p.features.map((f) => (
-                <li key={f} className="flex items-center gap-3 text-sm">
-                  <Check className="size-4 text-success" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-        <span className="flex items-center gap-2">
-          <Check className="size-4 text-success" /> 3-day free trial (3 free articles)
-        </span>
-        <span className="flex items-center gap-2">
-          <Check className="size-4 text-success" /> No credit card required
-        </span>
-        <span className="flex items-center gap-2">
-          <Check className="size-4 text-success" /> Cancel anytime with 1 click
-        </span>
-      </div>
 
-      <TrialSignupModal
-        isOpen={showTrialModal}
-        onClose={() => setShowTrialModal(false)}
-      />
+      <div className="mt-12 rounded-xl border border-primary/20 bg-primary/5 p-4 text-center text-xs text-muted-foreground max-w-2xl mx-auto">
+        <strong>Guaranteed Turnaround:</strong> Every audit is compiled within 24 business hours. No subscription lock-in, no hidden charges.
+      </div>
     </section>
   );
 }
+
 export function AISearch() {
   return <AIComparison />;
 }

@@ -33,6 +33,8 @@ import {
 } from "@/components/ui/dialog";
 import { Brand, PlatformLogo } from "@/components/brand";
 import { TrafficChart } from "@/components/traffic-chart";
+import { TrialSignupModal } from "@/components/TrialSignupModal";
+import { useUser, UserButton } from "@clerk/react";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
@@ -61,56 +63,7 @@ type Article = {
   status: "Published" | "Scheduled" | "Draft";
   date: string;
 };
-const initial: Article[] = [
-  {
-    id: 1,
-    title: "The complete guide to sustainable business growth",
-    keyword: "sustainable business growth",
-    words: 1840,
-    status: "Published",
-    date: "Oct 12",
-  },
-  {
-    id: 2,
-    title: "7 proven ways to improve your customer experience",
-    keyword: "improve customer experience",
-    words: 2150,
-    status: "Published",
-    date: "Oct 11",
-  },
-  {
-    id: 3,
-    title: "How to choose the right tools for your business",
-    keyword: "best business tools",
-    words: 1680,
-    status: "Published",
-    date: "Oct 10",
-  },
-  {
-    id: 4,
-    title: "Why AI search is the next big opportunity for brands",
-    keyword: "AI search optimization",
-    words: 2240,
-    status: "Scheduled",
-    date: "Oct 14",
-  },
-  {
-    id: 5,
-    title: "Building an organic growth strategy that lasts",
-    keyword: "organic growth strategy",
-    words: 1920,
-    status: "Scheduled",
-    date: "Oct 16",
-  },
-  {
-    id: 6,
-    title: "The small business guide to content marketing",
-    keyword: "content marketing for small business",
-    words: 1430,
-    status: "Draft",
-    date: "Oct 18",
-  },
-];
+const initial: Article[] = [];
 function Status({ status }: { status: Article["status"] }) {
   return (
     <span
@@ -151,29 +104,96 @@ function Dashboard() {
   const [userEmail, setUserEmail] = useState("");
   const [freeArticlesLeft, setFreeArticlesLeft] = useState(3);
   const [isTrialActive, setIsTrialActive] = useState(true);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  let clerkUser: any = null;
+  try {
+    const userHook = useUser();
+    clerkUser = userHook?.user;
+  } catch (e) {}
+
+  useEffect(() => {
+    if (clerkUser) {
+      const email = clerkUser.primaryEmailAddress?.emailAddress || "";
+      if (email) {
+        setUserEmail(email);
+        setAuthModalOpen(false);
+
+        // Save session locally
+        if (typeof window !== "undefined") {
+          const current = localStorage.getItem("georanked_session");
+          let domainVal = userDomain !== "yourbrand.com" ? userDomain : "";
+          if (!domainVal && email.includes("@")) {
+            const host = email.split("@")[1];
+            if (!["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"].includes(host)) {
+              domainVal = host;
+            }
+          }
+          if (domainVal) setUserDomain(domainVal);
+
+          localStorage.setItem("georanked_session", JSON.stringify({
+            email,
+            domain: domainVal || "yourbrand.com",
+            freeArticlesLeft: 3,
+            trialActive: true,
+            authProvider: "clerk_google",
+            expiresAt: Date.now() + 3 * 24 * 60 * 60 * 1000,
+          }));
+
+          // Send to private Supabase DB
+          fetch("/api/notify-lead", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "clerk_authenticated_user",
+              email,
+              domain: domainVal || "yourbrand.com",
+              website: `https://${domainVal || "yourbrand.com"}`,
+              plan: "3-Day Free Trial ($79/mo Starter)",
+              authProvider: "clerk_google",
+              timestamp: new Date().toISOString(),
+            }),
+          }).catch(() => {});
+        }
+      }
+    }
+  }, [clerkUser]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const normalizeDomain = (raw: string) => {
+        return raw.trim().toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
+      };
+
       const params = new URLSearchParams(window.location.search);
       const urlDomain = params.get("domain");
       const urlEmail = params.get("email");
+
+      let currentDomain = urlDomain ? normalizeDomain(urlDomain) : "";
+      let currentEmail = urlEmail || "";
+
       const saved = localStorage.getItem("georanked_session");
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (parsed.domain) setUserDomain(parsed.domain);
-          if (parsed.email) setUserEmail(parsed.email);
+          if (!currentDomain && parsed.domain) currentDomain = normalizeDomain(parsed.domain);
+          if (!currentEmail && parsed.email) currentEmail = parsed.email;
           if (typeof parsed.freeArticlesLeft === "number") setFreeArticlesLeft(parsed.freeArticlesLeft);
         } catch (e) {}
       }
-      if (urlDomain) setUserDomain(urlDomain);
-      if (urlEmail) setUserEmail(urlEmail);
-      if (params.get("payment") === "success") {
+
+      if (currentDomain) setUserDomain(currentDomain);
+      if (currentEmail) setUserEmail(currentEmail);
+
+      if (params.get("payment") === "success" || params.get("checkout_id")) {
         setPaymentSuccess(true);
         setIsTrialActive(false);
+        setAuthModalOpen(false);
+      } else if (!currentEmail && !clerkUser && !params.get("domain")) {
+        setAuthModalOpen(true);
       }
     }
-  }, []);
+  }, [clerkUser]);
 
   useEffect(() => {
     if (!toast) return;
@@ -277,8 +297,8 @@ function Dashboard() {
             <Globe className="size-4" />
           </span>
           <div>
-            <p className="text-xs font-semibold capitalize">{userDomain.split('.')[0] || "Your Brand"}</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">{userDomain}</p>
+            <p className="text-xs font-semibold capitalize">{userDomain.replace(/^www\./, '').split('.')[0] || "Your Brand"}</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">{userDomain.replace(/^www\./, '')}</p>
           </div>
           <ChevronDown className="ml-auto size-3 text-muted-foreground" />
         </div>
@@ -335,13 +355,13 @@ function Dashboard() {
             Back to website
           </Link>
           <div className="mt-5 flex items-center gap-3 border-t border-border pt-5">
-            <span className="flex size-8 items-center justify-center rounded-full bg-ink text-xs text-on-ink">
-              JD
+            <span className="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground uppercase shadow-sm">
+              {userDomain.replace(/^www\./, '').slice(0, 2) || "GR"}
             </span>
-            <div className="text-xs font-semibold">
-              Demo workspace
-              <p className="mt-1 text-[10px] font-normal text-muted-foreground">
-                No live data connected
+            <div className="text-xs font-semibold truncate max-w-[140px]">
+              <span className="capitalize">{userDomain.replace(/^www\./, '').split('.')[0] || "Workspace"}</span>
+              <p className="mt-0.5 text-[10px] font-normal text-muted-foreground truncate">
+                {userEmail || `${userDomain.replace(/^www\./, '')}`}
               </p>
             </div>
           </div>
@@ -379,7 +399,7 @@ function Dashboard() {
                 <div>
                   <h3 className="font-bold text-sm sm:text-base">🎉 Subscription Activated! Welcome to GeoRanked Pro</h3>
                   <p className="mt-0.5 text-xs text-emerald-900/80 dark:text-emerald-200/90 leading-relaxed">
-                    Your Polar checkout was confirmed. Continuous Perplexity & ChatGPT citation indexing and autonomous monthly articles are now unlocked for your domain.
+                    Thank you for your order. Our team and GEO engine are compiling your 15-page AI Search Visibility & Citation Blueprint. Your comprehensive PDF report, competitor citation breakdown, and ready-to-copy LocalBusiness Schema will be delivered to your email within 24 hours.
                   </p>
                 </div>
               </div>
@@ -445,15 +465,15 @@ function Dashboard() {
             <>
               <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {[
-                  [TrendingUp, "Organic clicks", "24,892", "+184.6%"],
+                  [Sparkles, "Trial quota remaining", `${freeArticlesLeft} / 3 free`, "Free pass active"],
                   [
                     FileText,
                     "Articles published",
                     String(articles.filter((a) => a.status === "Published").length),
-                    "This month",
+                    "Ready to deploy",
                   ],
-                  [Sparkles, "AI citation rate", "32.8%", "+12.4%"],
-                  [Search, "Keywords ranking", "148", "+42 keywords"],
+                  [TrendingUp, "AI citation readiness", "100%", "Perplexity & ChatGPT"],
+                  [Search, "Identified opportunities", "24 keywords", `For ${userDomain}`],
                 ].map(([Icon, label, value, change]) => {
                   const I = Icon as typeof TrendingUp;
                   return (
@@ -466,11 +486,8 @@ function Dashboard() {
                         <I className="size-4" />
                       </div>
                       <div className="mt-4 text-3xl font-bold">{String(value)}</div>
-                      <div className="mt-2 text-[11px] text-success">
-                        {String(change)}{" "}
-                        <span className="ml-1 text-muted-foreground">
-                          {label === "Articles published" ? "" : "vs. last period"}
-                        </span>
+                      <div className="mt-2 text-[11px] text-success font-medium">
+                        {String(change)}
                       </div>
                     </div>
                   );
@@ -513,31 +530,46 @@ function Dashboard() {
                     View all <ArrowRight />
                   </Button>
                 </div>
-                {articles.slice(0, 4).map((a) => (
-                  <div
-                    key={a.id}
-                    className="flex items-center justify-between gap-3 border-b border-border/60 px-5 py-4 last:border-0"
-                  >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="hidden rounded-md bg-muted p-2 sm:block">
-                        <FileText className="size-4 text-muted-foreground" />
-                      </span>
-                      <div className="min-w-0">
-                        <Button
-                          variant="link"
-                          className="h-auto max-w-full justify-start whitespace-normal p-0 text-left text-xs text-foreground"
-                          onClick={() => setSelected(a)}
-                        >
-                          {a.title}
-                        </Button>
-                        <p className="mt-1 text-[10px] text-muted-foreground">
-                          {a.words.toLocaleString()} words · {a.date}
-                        </p>
-                      </div>
+                {articles.length === 0 ? (
+                  <div className="p-10 text-center flex flex-col items-center justify-center">
+                    <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
+                      <Sparkles className="size-6" />
                     </div>
-                    <Status status={a.status} />
+                    <h3 className="text-sm sm:text-base font-semibold">No articles generated yet</h3>
+                    <p className="text-xs text-muted-foreground mt-1 max-w-sm">
+                      Your 3-day free trial includes 3 autonomous GEO articles for <span className="text-foreground font-semibold">{userDomain}</span>. Generate your first one now.
+                    </p>
+                    <Button onClick={openGenerator} className="glow-button mt-4 text-xs font-semibold">
+                      <Plus className="mr-1.5 size-4" /> Generate First Article (Free Trial)
+                    </Button>
                   </div>
-                ))}
+                ) : (
+                  articles.slice(0, 4).map((a) => (
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between gap-3 border-b border-border/60 px-5 py-4 last:border-0"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span className="hidden rounded-md bg-muted p-2 sm:block">
+                          <FileText className="size-4 text-muted-foreground" />
+                        </span>
+                        <div className="min-w-0">
+                          <Button
+                            variant="link"
+                            className="h-auto max-w-full justify-start whitespace-normal p-0 text-left text-xs text-foreground"
+                            onClick={() => setSelected(a)}
+                          >
+                            {a.title}
+                          </Button>
+                          <p className="mt-1 text-[10px] text-muted-foreground">
+                            {a.words.toLocaleString()} words · {a.date}
+                          </p>
+                        </div>
+                      </div>
+                      <Status status={a.status} />
+                    </div>
+                  ))
+                )}
               </section>
             </>
           )}
@@ -598,35 +630,52 @@ function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {visible.map((a) => (
-                        <tr key={a.id} className="border-b border-border last:border-0">
-                          <td className="max-w-sm px-5 py-5">
-                            <Button
-                              variant="link"
-                              className="h-auto whitespace-normal p-0 text-left text-xs font-semibold text-foreground"
-                              onClick={() => setSelected(a)}
-                            >
-                              {a.title}
-                            </Button>
-                            <p className="mt-1.5 text-[10px] text-muted-foreground">{a.keyword}</p>
-                          </td>
-                          <td className="px-5">
-                            <Status status={a.status} />
-                          </td>
-                          <td className="px-5 text-muted-foreground">{a.words.toLocaleString()}</td>
-                          <td className="px-5 text-muted-foreground">{a.date}, 2026</td>
-                          <td className="px-3">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={`View ${a.title}`}
-                              onClick={() => setSelected(a)}
-                            >
-                              <ArrowUpRight />
-                            </Button>
+                      {visible.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-12 text-center text-muted-foreground">
+                            <div className="flex flex-col items-center justify-center">
+                              <Sparkles className="size-8 text-primary/60 mb-2" />
+                              <p className="font-semibold text-sm text-foreground">No articles generated yet</p>
+                              <p className="text-xs text-muted-foreground mt-0.5 max-w-sm">
+                                Your 3-day free trial includes 3 autonomous GEO articles for {userDomain}.
+                              </p>
+                              <Button onClick={openGenerator} className="glow-button mt-4 text-xs font-semibold">
+                                <Plus className="mr-1.5 size-3.5" /> Generate First Article
+                              </Button>
+                            </div>
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        visible.map((a) => (
+                          <tr key={a.id} className="border-b border-border last:border-0">
+                            <td className="max-w-sm px-5 py-5">
+                              <Button
+                                variant="link"
+                                className="h-auto whitespace-normal p-0 text-left text-xs font-semibold text-foreground"
+                                onClick={() => setSelected(a)}
+                              >
+                                {a.title}
+                              </Button>
+                              <p className="mt-1.5 text-[10px] text-muted-foreground">{a.keyword}</p>
+                            </td>
+                            <td className="px-5">
+                              <Status status={a.status} />
+                            </td>
+                            <td className="px-5 text-muted-foreground">{a.words.toLocaleString()}</td>
+                            <td className="px-5 text-muted-foreground">{a.date}, 2026</td>
+                            <td className="px-3">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={`View ${a.title}`}
+                                onClick={() => setSelected(a)}
+                              >
+                                <ArrowUpRight />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                   {visible.length === 0 && (
@@ -993,6 +1042,23 @@ function Dashboard() {
           )}
         </DialogContent>
       </Dialog>
+
+      <TrialSignupModal
+        isOpen={authModalOpen}
+        onClose={() => {
+          if (!userEmail) {
+            window.location.href = "/";
+          } else {
+            setAuthModalOpen(false);
+          }
+        }}
+        defaultDomain={userDomain !== "yourbrand.com" ? userDomain : ""}
+        onSuccess={(data) => {
+          setUserEmail(data.email);
+          setUserDomain(data.domain);
+          setAuthModalOpen(false);
+        }}
+      />
     </div>
   );
 }
