@@ -385,15 +385,20 @@ function FreeAuditPage() {
               </div>
 
               {/* Conversion Call-to-Action Card */}
-              <div className="rounded-2xl border-2 border-primary/40 bg-card p-7 shadow-2xl text-center sm:p-10">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
+              <div className="rounded-2xl border-2 border-primary/50 bg-card p-7 shadow-2xl text-center sm:p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 left-0 bg-primary/10 py-1.5 px-4 border-b border-primary/20 text-[11px] font-bold text-primary flex items-center justify-center gap-2">
+                  <span>⚡ LOCAL EXCLUSIVITY: Max 2 businesses per city/ZIP code accepted</span>
+                </div>
+
+                <div className="pt-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
                   <Zap className="size-4" /> 24-HOUR ACTIONABLE DELIVERABLE
                 </div>
+
                 <h3 className="mt-4 text-2xl font-bold sm:text-3xl">
                   Get Your 15-Page AI Visibility & Citation Blueprint
                 </h3>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  A complete forensic breakdown of what ChatGPT, Perplexity, and Gemini say about your business and your city. Includes your competitors' exact citation sources, missing entity schemas, and ready-to-copy Schema markup.
+                  A forensic analysis of how ChatGPT, Perplexity, and Google Gemini rank your business vs. competitors in your city. Includes your competitors' exact citation sources, missing entity schemas, and ready-to-copy LocalBusiness Schema code.
                 </p>
 
                 <div className="my-6">
@@ -404,7 +409,7 @@ function FreeAuditPage() {
                 <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button
                     size="lg"
-                    className="glow-button h-13 rounded-full px-8 text-sm font-bold w-full sm:w-auto"
+                    className="glow-button h-13 rounded-full px-8 text-sm font-bold w-full sm:w-auto shadow-xl"
                     asChild
                   >
                     <a
@@ -412,7 +417,7 @@ function FreeAuditPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Order Full 15-Page Report ($49) <ArrowRight className="ml-2 size-4" />
+                      Order 15-Page Audit Report ($49) <ArrowRight className="ml-2 size-4" />
                     </a>
                   </Button>
                   <Button
@@ -427,9 +432,9 @@ function FreeAuditPage() {
                   </Button>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground border-t border-border/60 pt-5">
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="size-4 text-success" /> Delivered in 24 hours
+                    <ShieldCheck className="size-4 text-success" /> Delivered in 24 hours via email
                   </span>
                   <span>•</span>
                   <span>One-time payment — zero recurring fees</span>
@@ -437,21 +442,34 @@ function FreeAuditPage() {
                   <span>Human-verified AI citation analysis</span>
                 </div>
               </div>
-                      Explore Interactive Dashboard ↗
-                    </Link>
-                  </Button>
-                </div>
+            </div>
+          )}
 
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="size-4 text-success" /> 3 free articles included
-                  </span>
-                  <span>•</span>
-                  <span>No credit card required</span>
-                  <span>•</span>
-                  <span>Cancel anytime</span>
+          {/* Sticky Conversion Bar when audit result is displayed */}
+          {auditResult && (
+            <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-3xl rounded-2xl border-2 border-primary/60 bg-background/95 p-3.5 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4">
+              <div className="flex items-center gap-3 text-left">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-destructive/10 text-destructive font-black text-xs">
+                  {auditResult.overallScore}%
+                </span>
+                <div>
+                  <div className="text-xs font-bold text-foreground">
+                    {domainInput || auditResult.domain} — Unranked in AI Search
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    Competitors recommended by ChatGPT & Perplexity. Get the fix blueprint.
+                  </div>
                 </div>
               </div>
+              <Button size="sm" className="glow-button rounded-xl font-bold px-6 shrink-0 text-xs h-10 w-full sm:w-auto" asChild>
+                <a
+                  href="https://buy.polar.sh/polar_cl_O9bjWaIMCUHrVeRAE6xtDtBnLAapgiqBRYwAU10ESqm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get 15-Page Audit ($49) →
+                </a>
+              </Button>
             </div>
           )}
 
